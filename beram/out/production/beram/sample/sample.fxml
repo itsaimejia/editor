@@ -1,8 +1,56 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<GridPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-</GridPane>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="panel_principal" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: #37424f;" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="sample.Controller">
+    <children>
+        <AnchorPane fx:id="panel_barra" layoutX="-3.0" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <MenuBar fx:id="menu_bar" prefHeight="25.0" prefWidth="609.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <menus>
+                        <Menu fx:id="menu_file" mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem fx:id="item_open" text="Open" onAction="#onOpen" />
+                                <MenuItem fx:id="item_save" mnemonicParsing="false" text="Save" onAction="#onSave" />
+                                <MenuItem fx:id="item_saveAs" mnemonicParsing="false" text="Save as" onAction="#onSaveAs"/>
+                                <MenuItem fx:id="item_print" mnemonicParsing="true" text="Print" onAction="#onPrint"/>
+                                <MenuItem fx:id="item_new" mnemonicParsing="false" text="New" onAction="#onNew" />
+                                <MenuItem fx:id="item_exit" mnemonicParsing="false" text="Salir" onAction="#onExit" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="menu_edit" mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem fx:id="item_copy" mnemonicParsing="false" text="Copy" />
+                                <MenuItem fx:id="item_paste" mnemonicParsing="false" text="Paste" />
+                                <MenuItem fx:id="Item_cut" mnemonicParsing="false" text="Cut" />
+                                <MenuItem fx:id="item_delete" mnemonicParsing="false" text="Delete" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="menu_help" mnemonicParsing="false" text="Help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="panel_textArea" layoutX="27.0" layoutY="76.0" prefHeight="249.0" prefWidth="541.0">
+            <children>
+                <TextArea fx:id="text_area" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="528.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <ScrollBar layoutX="304.0" layoutY="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="235.0" />
+                <ScrollBar layoutX="520.0" layoutY="35.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </children>
+        </AnchorPane>
+
+    </children>
+</AnchorPane>
