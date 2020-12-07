@@ -18,7 +18,7 @@ public class Controller {
     private void onOpen()
     {
         FileChooser fc= new FileChooser();
-        FileChooser.ExtensionFilter txt = new FileChooser.ExtensionFilter("Archivo de texto (.txt)" ,".txt");
+        FileChooser.ExtensionFilter txt = new FileChooser.ExtensionFilter("TXT file (.txt)" ,".txt");
         FileChooser.ExtensionFilter pdf = new FileChooser.ExtensionFilter("PDF file(.pdf)" ,".pdf");
         FileChooser.ExtensionFilter dat = new FileChooser.ExtensionFilter("Binary Code (.dat)" ,".dat");
         fc.getExtensionFilters().add(txt);
@@ -27,7 +27,8 @@ public class Controller {
         fc.showOpenDialog(new Stage());
 
         //Capturar archivo a poner en JTextArea
-        File  archivo= new File (fc.getInitialFileName());
+        File  archivo= new File (fc.getInitialDirectory()+fc.getInitialFileName());
+        System.out.println(fc.getInitialDirectory()+fc.getInitialFileName());
         text_area.setText("");
         try {
             if (archivo != null){
