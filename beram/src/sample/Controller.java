@@ -32,9 +32,12 @@ public class Controller {
     @FXML
     private void onOpen()
     {
+
         String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
         ruta_actual=path_name;
         String fill_text="";
+        area=text_area;
+        area.setText("");
         if (path_name != null) {
             try (BufferedReader br = new BufferedReader(new FileReader(path_name))) {
                 String strCurrentLine;
@@ -45,7 +48,7 @@ public class Controller {
             } catch (IOException e) {
                 System.out.println(e.toString());
             }
-            area=text_area;
+
             area.appendText(fill_text);
             creado=true;
         }
@@ -83,7 +86,7 @@ public class Controller {
         try{
             File userDirectory = new File("C:");
             fileChooser.setInitialDirectory(userDirectory);
-            fileChooser.setTitle("Guardar Archivo");
+            fileChooser.setTitle("Guardar archivo");
             area=text_area;
             File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
             ruta_actual=fichero.getPath();
@@ -105,7 +108,18 @@ public class Controller {
     @FXML
     private void onNew()
     {
-
+        try{
+            File userDirectory = new File("C:");
+            fileChooser.setInitialDirectory(userDirectory);
+            fileChooser.setTitle("Nuevo archivo");
+            area=text_area;
+            File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
+            ruta_actual=fichero.getPath();
+            area.setText("");
+            creado=true;
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
     }
     @FXML
     private void onClose()
