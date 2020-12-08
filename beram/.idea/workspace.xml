@@ -99,12 +99,14 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="OverrideImplement.combined" value="false" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH" value="134" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="223" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../../../Program Files/SceneBuilder/SceneBuilder.exe" />
+    <property name="last_opened_file_path" value="$PATH_TO_FX$/src.zip" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -124,6 +126,19 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -139,13 +154,7 @@
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="sample.Main" />
       <module name="beram" />
-      <option name="VM_PARAMETERS" value="--module-path C:\Users\Berenice\Downloads\javafx-sdk-11.0.2\lib --add-modules javafx.controls,javafx.fxml" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sample.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Javalib\javafx-sdk-15.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
       <method v="2">
@@ -154,19 +163,6 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -239,50 +235,14 @@
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="134" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606959659562">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="134" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1360.728@0.0.1360.728" timestamp="1606959659562" />
-    <state x="409" y="153" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1606964140602">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="409" y="153" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1360.728@0.0.1360.728" timestamp="1606964140602" />
-    <state x="462" y="142" key="#com.intellij.uiDesigner.palette.ComponentItemDialog" timestamp="1606964175709">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="554" y="248" key="#com.intellij.uiDesigner.palette.ComponentItemDialog.OneOff" timestamp="1606961125531">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="554" y="248" key="#com.intellij.uiDesigner.palette.ComponentItemDialog.OneOff/0.0.1360.728@0.0.1360.728" timestamp="1606961125531" />
-    <state x="462" y="142" key="#com.intellij.uiDesigner.palette.ComponentItemDialog/0.0.1360.728@0.0.1360.728" timestamp="1606964175709" />
-    <state x="460" y="118" key="FileChooserDialogImpl" timestamp="1606972549802">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="460" y="118" key="FileChooserDialogImpl/0.0.1360.728@0.0.1360.728" timestamp="1606972549802" />
-    <state width="1317" height="179" key="GridCell.Tab.0.bottom" timestamp="1607324739118">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state width="1317" height="179" key="GridCell.Tab.0.bottom/0.0.1360.728@0.0.1360.728" timestamp="1607324739118" />
-    <state width="1317" height="179" key="GridCell.Tab.0.center" timestamp="1607324739117">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state width="1317" height="179" key="GridCell.Tab.0.center/0.0.1360.728@0.0.1360.728" timestamp="1607324739117" />
-    <state width="1317" height="179" key="GridCell.Tab.0.left" timestamp="1607324739117">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state width="1317" height="179" key="GridCell.Tab.0.left/0.0.1360.728@0.0.1360.728" timestamp="1607324739117" />
-    <state width="1317" height="179" key="GridCell.Tab.0.right" timestamp="1607324739117">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state width="1317" height="179" key="GridCell.Tab.0.right/0.0.1360.728@0.0.1360.728" timestamp="1607324739117" />
-    <state x="160" y="0" key="SettingsEditor" timestamp="1606959459449">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="160" y="0" key="SettingsEditor/0.0.1360.728@0.0.1360.728" timestamp="1606959459449" />
-    <state x="450" y="243" key="com.intellij.uiDesigner.propertyInspector.editors.string.StringEditorDialog" timestamp="1606960344145">
-      <screen x="0" y="0" width="1360" height="728" />
-    </state>
-    <state x="450" y="243" key="com.intellij.uiDesigner.propertyInspector.editors.string.StringEditorDialog/0.0.1360.728@0.0.1360.728" timestamp="1606960344145" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/out/production/beram/sample/Main.class</url>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
