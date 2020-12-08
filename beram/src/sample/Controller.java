@@ -2,24 +2,23 @@ package sample;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Controller {
 
     @FXML
-    static TextArea text_area;
+    private TextArea text_area;
+    static TextArea area;
 
     @FXML
-    private void onOpen() throws IOException
+    private void onOpen()
     {
-        text_area = new TextArea();
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(
@@ -39,7 +38,8 @@ public class Controller {
                 System.out.println(e.toString());;
             }
             System.out.println(fill_text);
-            text_area.appendText(fill_text);
+            area=text_area;
+            area.appendText(fill_text);
         }
     }
 
@@ -47,11 +47,39 @@ public class Controller {
     private void onSave()
     {
 
+
     }
 
     @FXML
     private void onSaveas()
     {
+
+        try{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().addAll(
+                    new ExtensionFilter("Text Files", "*.txt"),
+                    new ExtensionFilter("PDF Files","*.pdf"),
+                    new ExtensionFilter("dat Files","*.dat"),
+                    new ExtensionFilter("all files",".")
+            );
+            File userDirectory = new File("C:");
+            fileChooser.setInitialDirectory(userDirectory);
+            fileChooser.setTitle("Guardar Archivo");
+            area=text_area;
+            File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
+            if(fichero != null)
+            {
+                try(FileWriter fw = new FileWriter(fichero)){
+                    fw.write(area.getText());
+                }catch(final IOException ex){
+                    ex.printStackTrace();
+                }
+
+            }
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
 
     }
     @FXML
