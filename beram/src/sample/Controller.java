@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -13,6 +15,8 @@ public class Controller {
     @FXML
     private TextArea text_area;
     static TextArea area;
+
+
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
     static String path_actual;
@@ -31,7 +35,6 @@ public class Controller {
     @FXML
     private void onOpen()
     {
-
         String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
         path_actual =path_name;
         String fill_text="";
@@ -106,12 +109,13 @@ public class Controller {
     private void onNew()
     {
         try{
-            File userDirectory = new File("C:");
+            String initial_path = System.getProperty("user.home");
+            File userDirectory = new File(initial_path);
             fileChooser.setInitialDirectory(userDirectory);
             fileChooser.setTitle("Nuevo archivo");
             area=text_area;
             File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
-            path_actual =fichero.getPath();
+            path_actual = fichero.getPath();
             area.setText("");
             creado=true;
         }catch(Exception e){
