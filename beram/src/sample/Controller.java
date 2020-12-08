@@ -6,7 +6,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.*;
 
 public class Controller {
@@ -16,7 +15,7 @@ public class Controller {
     static TextArea area;
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
-    static String ruta_actual;
+    static String path_actual;
     public Controller() {
 
         fileChooser.setTitle("Open Resource File");
@@ -34,7 +33,7 @@ public class Controller {
     {
 
         String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
-        ruta_actual=path_name;
+        path_actual =path_name;
         String fill_text="";
         area=text_area;
         area.setText("");
@@ -61,10 +60,9 @@ public class Controller {
         {
             try
             {
-                FileWriter f2 = new FileWriter(ruta_actual,false);
-                f2.write(area.getText());
-                f2.close();
-
+                FileWriter fw = new FileWriter(path_actual,false);
+                fw.write(area.getText());
+                fw.close();
             }
             catch(IOException e)
             {
@@ -73,8 +71,7 @@ public class Controller {
         }
         else
         {
-            JOptionPane.showMessageDialog(new JFrame(),"No se ha seleccionado un archivo", "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            System.out.println("No se ha seleccionado archivo");
         }
 
     }
@@ -89,7 +86,7 @@ public class Controller {
             fileChooser.setTitle("Guardar archivo");
             area=text_area;
             File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
-            ruta_actual=fichero.getPath();
+            path_actual =fichero.getPath();
             if(fichero != null)
             {
                 try(FileWriter fw = new FileWriter(fichero)){
@@ -114,7 +111,7 @@ public class Controller {
             fileChooser.setTitle("Nuevo archivo");
             area=text_area;
             File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
-            ruta_actual=fichero.getPath();
+            path_actual =fichero.getPath();
             area.setText("");
             creado=true;
         }catch(Exception e){
