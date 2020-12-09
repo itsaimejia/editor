@@ -20,21 +20,14 @@
                     <menus>
                         <Menu fx:id="menu_file" mnemonicParsing="false" text="File">
                             <items>
+                                <MenuItem fx:id="item_new" mnemonicParsing="false" text="New" onAction="#onNew" />
                                 <MenuItem fx:id="item_open" text="Open" onAction="#onOpen" />
                                 <MenuItem fx:id="item_save" mnemonicParsing="false" text="Save" onAction="#onSave" />
                                 <MenuItem fx:id="item_saveAs" mnemonicParsing="false" text="Save as" onAction="#onSaveas"/>
-                                <MenuItem fx:id="item_new" mnemonicParsing="false" text="New" onAction="#onNew" />
                                 <MenuItem fx:id="item_exit" mnemonicParsing="false" text="Salir" onAction="#onClose" />
                             </items>
                         </Menu>
-                        <Menu fx:id="menu_edit" mnemonicParsing="false" text="Edit">
-                            <items>
-                                <MenuItem fx:id="item_scopy" mnemonicParsing="false" text="Copy" />
-                                <MenuItem fx:id="item_paste" mnemonicParsing="false" text="Paste" />
-                                <MenuItem fx:id="Item_cut" mnemonicParsing="false" text="Cut" />
-                                <MenuItem fx:id="item_delete" mnemonicParsing="false" text="Delete" />
-                            </items>
-                        </Menu>
+
                         <Menu fx:id="menu_help" mnemonicParsing="false" text="Help">
                             <items>
                                 <MenuItem mnemonicParsing="false" text="About" />
@@ -49,6 +42,5 @@
                 <TextArea fx:id="text_area" layoutX="14.0" layoutY="14.0" prefHeight="200.0"  wrapText="true" prefWidth="528.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
-
     </children>
 </AnchorPane>
