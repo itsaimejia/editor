@@ -21,9 +21,9 @@ public class Controller {
     static String path_actual;
     static Alert alert = new Alert(Alert.AlertType.WARNING);
     static String initial_path = System.getProperty("user.home");
+
+
     public Controller() {
-
-
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("PDF Files","*.pdf"),
@@ -58,7 +58,7 @@ public class Controller {
                 alert.showAndWait();
             }
         }catch (Exception e){
-            System.out.println(e.toString());
+
         }
     }
 
@@ -66,14 +66,12 @@ public class Controller {
     private void onSave() throws IOException
     {
         if(creado) {
-            FileWriter fw = new FileWriter(path_actual,false);
-            fw.write(area.getText());
-            fw.close();
+            saveFile();
         }
         else {
-            alert.setTitle("Save ");
-            alert.setContentText("No se ha seleccionado archivo");
-            alert.showAndWait();
+            saveAsFile();
+            saveFile();
+            creado=true;
         }
 
     }
@@ -81,24 +79,10 @@ public class Controller {
     @FXML
     private void onSaveas() throws IOException
     {
-
-        try{
-            File userDirectory = new File(initial_path);
-            fileChooser.setInitialDirectory(userDirectory);
-            fileChooser.setTitle("Guardar como");
-            area=text_area;
-            File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
-            path_actual =fichero.getPath();
-            if(fichero != null)
-            {
-                FileWriter fw = new FileWriter(fichero);
-                fw.write(area.getText());
-                creado =true;
-            }
-        }catch(Exception e){
-        }
-
+        saveAsFile();
+        creado =true;
     }
+
     @FXML
     private void onNew() throws  IOException
     {
@@ -117,6 +101,28 @@ public class Controller {
     private void onClose()
     {
         System.exit(0);
+    }
+
+    private void saveAsFile() throws  IOException{
+        try{
+            File userDirectory = new File(initial_path);
+            fileChooser.setInitialDirectory(userDirectory);
+            fileChooser.setTitle("Guardar como");
+            area=text_area;
+            File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
+            path_actual =fichero.getPath();
+            if(fichero != null) {
+                FileWriter fw = new FileWriter(fichero);
+                fw.write(area.getText());
+            }
+        }catch(Exception e){
+        }
+    }
+
+    private void saveFile() throws  IOException{
+        FileWriter fw = new FileWriter(path_actual,false);
+        fw.write(area.getText());
+        fw.close();
     }
 
 
