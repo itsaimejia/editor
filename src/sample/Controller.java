@@ -28,7 +28,7 @@ public class Controller {
     static String path_actual;
     static Alert alert = new Alert(AlertType.WARNING);
     static String initial_path = System.getProperty("user.home");
-    static String last_text="";
+    static String last_text;
 
 
     public Controller() {
@@ -136,7 +136,7 @@ public class Controller {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         ButtonType btn_save;
         ButtonType btn_exit = new ButtonType("Salir");
-
+        area=text_area;
         if(creado){
             if(last_text.equals(area.getText())){
                 System.exit(0);
@@ -177,7 +177,6 @@ public class Controller {
             }
         }
     }
-
     private void saveAsFile() throws  IOException{
         try{
             File userDirectory = new File(initial_path);
@@ -190,16 +189,15 @@ public class Controller {
                 FileWriter fw = new FileWriter(fichero);
                 fw.write(area.getText());
             }
+            last_text=area.getText();
             creado=true;
         }catch(Exception e){
         }
     }
-
     private void saveFile() throws  IOException{
         FileWriter fw = new FileWriter(path_actual,false);
         fw.write(area.getText());
         fw.close();
+        last_text=area.getText();
     }
-
-
 }
