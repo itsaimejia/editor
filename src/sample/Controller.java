@@ -83,7 +83,9 @@ public class Controller {
     {
 
         try{
-            setFileChooser("Guardar como");
+            File userDirectory = new File(initial_path);
+            fileChooser.setInitialDirectory(userDirectory);
+            fileChooser.setTitle("Guardar como");
             area=text_area;
             File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
             path_actual =fichero.getPath();
@@ -101,7 +103,9 @@ public class Controller {
     private void onNew() throws  IOException
     {
         try{
-            setFileChooser("Nuevo archivo");
+            File userDirectory = new File(initial_path);
+            fileChooser.setInitialDirectory(userDirectory);
+            fileChooser.setTitle("Nuevo archivo");
             area=text_area;
             path_actual = fileChooser.showSaveDialog(area.getScene().getWindow()).getPath();
             area.setText("");
@@ -113,12 +117,6 @@ public class Controller {
     private void onClose()
     {
         System.exit(0);
-    }
-
-    private void setFileChooser(String title){
-        File userDirectory = new File(initial_path);
-        fileChooser.setInitialDirectory(userDirectory);
-        fileChooser.setTitle(title);
     }
 
 
