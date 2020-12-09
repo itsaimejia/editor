@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -18,6 +19,8 @@ public class Controller {
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
     static String path_actual;
+    static Alert alert = new Alert(Alert.AlertType.WARNING);
+    static String initial_path = System.getProperty("user.home");
     public Controller() {
 
 
@@ -27,104 +30,95 @@ public class Controller {
                 new ExtensionFilter("dat Files","*.dat"),
                 new ExtensionFilter("all files",".")
         );
+        alert.setTitle("Error");
 
     }
 
     @FXML
-    private void onOpen()
+    private void onOpen() throws IOException
     {
-        fileChooser.setTitle("Seleccionar archivo");
-        String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
-        path_actual =path_name;
-        String fill_text="";
-        area=text_area;
-        area.setText("");
-        if (path_name != null) {
-            try (BufferedReader br = new BufferedReader(new FileReader(path_name))) {
+        try {
+            fileChooser.setTitle("Seleccionar archivo");
+            String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
+            path_actual = path_name;
+            String fill_text = "";
+            area = text_area;
+            area.setText("");
+            if (path_name != null) {
+                BufferedReader br = new BufferedReader(new FileReader(path_name));
                 String strCurrentLine;
                 while ((strCurrentLine = br.readLine()) != null) {
-                    fill_text+=strCurrentLine+"\n";
-
+                    fill_text += strCurrentLine + "\n";
                 }
-            } catch (IOException e) {
-                System.out.println(e.toString());
+                area.appendText(fill_text);
+                creado = true;
+            }else{
+                alert.setTitle("Open");
+                alert.setContentText("No seleccionaste ningun archivo");
+                alert.showAndWait();
             }
-
-            area.appendText(fill_text);
-            creado=true;
+        }catch (Exception e){
+            System.out.println(e.toString());
         }
     }
 
     @FXML
-    private void onSave()
+    private void onSave() throws IOException
     {
-        if(creado)
-        {
-            try
-            {
-                FileWriter fw = new FileWriter(path_actual,false);
-                fw.write(area.getText());
-                fw.close();
-            }
-            catch(IOException e)
-            {
-                e.printStackTrace();
-            }
+        if(creado) {
+            FileWriter fw = new FileWriter(path_actual,false);
+            fw.write(area.getText());
+            fw.close();
         }
-        else
-        {
-            System.out.println("No se ha seleccionado archivo");
+        else {
+            alert.setTitle("Save ");
+            alert.setContentText("No se ha seleccionado archivo");
+            alert.showAndWait();
         }
 
     }
 
     @FXML
-    private void onSaveas()
+    private void onSaveas() throws IOException
     {
 
         try{
-            File userDirectory = new File("C:");
-            fileChooser.setInitialDirectory(userDirectory);
-            fileChooser.setTitle("Guardar archivo");
+            setFileChooser("Guardar como");
             area=text_area;
             File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
             path_actual =fichero.getPath();
             if(fichero != null)
             {
-                try(FileWriter fw = new FileWriter(fichero)){
-                    fw.write(area.getText());
-                    creado =true;
-                }catch(final IOException ex){
-                    ex.printStackTrace();
-                }
-
+                FileWriter fw = new FileWriter(fichero);
+                fw.write(area.getText());
+                creado =true;
             }
         }catch(Exception e){
-            System.out.println(e.toString());
         }
 
     }
     @FXML
-    private void onNew()
+    private void onNew() throws  IOException
     {
         try{
-            String initial_path = System.getProperty("user.home");
-            File userDirectory = new File(initial_path);
-            fileChooser.setInitialDirectory(userDirectory);
-            fileChooser.setTitle("Nuevo archivo");
+            setFileChooser("Nuevo archivo");
             area=text_area;
-            File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
-            path_actual = fichero.getPath();
+            path_actual = fileChooser.showSaveDialog(area.getScene().getWindow()).getPath();
             area.setText("");
             creado=true;
         }catch(Exception e){
-            System.out.println(e.toString());
         }
     }
     @FXML
     private void onClose()
     {
         System.exit(0);
+    }
+
+    private void setFileChooser(String title){
+        File userDirectory = new File(initial_path);
+        fileChooser.setInitialDirectory(userDirectory);
+        fileChooser.setTitle(title);
     }
 
 
