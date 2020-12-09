@@ -138,7 +138,7 @@
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="sample.Main" />
-      <module name="beram" />
+      <module name="editor" />
       <option name="VM_PARAMETERS" value="--module-path C:\Javalib\javafx-sdk-15.0.1\lib --add-modules javafx.controls,javafx.fxml" />
       <extension name="coverage">
         <pattern>

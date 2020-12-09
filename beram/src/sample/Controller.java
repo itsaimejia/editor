@@ -22,7 +22,7 @@ public class Controller {
     static String path_actual;
     public Controller() {
 
-        fileChooser.setTitle("Open Resource File");
+
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("PDF Files","*.pdf"),
@@ -35,6 +35,7 @@ public class Controller {
     @FXML
     private void onOpen()
     {
+        fileChooser.setTitle("Seleccionar archivo");
         String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
         path_actual =path_name;
         String fill_text="";
