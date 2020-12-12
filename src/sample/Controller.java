@@ -18,8 +18,6 @@ public class Controller {
     @FXML
     private TextArea text_area;
 
-    @FXML
-    private Button btn_grun;
 
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
@@ -40,13 +38,29 @@ public class Controller {
 
     }
     @FXML
-    private void mostrarArbol(){
-        try {
-            String cmd = "";
-            Runtime.getRuntime().exec(cmd);
-        } catch (IOException ioe) {
-            System.out.println (ioe);
+    private void mostrarArbol() throws  IOException{
+
+        if (creado){
+            saveFile();
+            execGrun();
+        }else{
+            if(saveAsFile())
+                execGrun();
+
         }
+
+    }
+
+    private void execGrun() throws IOException{
+        //escribir sobre el archivo tel.txt
+        FileWriter fw = new FileWriter("C:\\Javalib\\num_telefono\\tel.txt",false);
+        fw.write(text_area.getText());
+        fw.close();
+
+        //ejecutar comando cmd
+        ProcessBuilder builder = new ProcessBuilder( "cmd.exe", "/c", "cd \"C:\\Javalib\\num_telefono\"&& commando.bat");
+        builder.redirectErrorStream(true);
+        builder.start();
     }
 
     @FXML
@@ -83,9 +97,10 @@ public class Controller {
             saveFile();
         }
         else {
-            saveAsFile();
-            saveFile();
-            creado=true;
+            if(saveAsFile()){
+                saveFile();
+                creado=true;
+            }
         }
 
     }
@@ -125,11 +140,6 @@ public class Controller {
             }catch(Exception e){
             }
         } else if (result.get() == this_window) {
-            /*File userDirectory = new File(initial_path);
-            fileChooser.setInitialDirectory(userDirectory);
-            fileChooser.setTitle("Nuevo archivo");
-            area=text_area;
-            path_actual = fileChooser.showSaveDialog(area.getScene().getWindow()).getPath();*/
             text_area.setText("");
             last_text= text_area.getText();
             creado=false;
@@ -181,7 +191,7 @@ public class Controller {
             }
         }
     }
-    private void saveAsFile() throws  IOException{
+    private boolean saveAsFile() throws  IOException{
         try{
             File userDirectory = new File(initial_path);
             fileChooser.setInitialDirectory(userDirectory);
@@ -194,7 +204,9 @@ public class Controller {
             }
             last_text= text_area.getText();
             creado=true;
+            return true;
         }catch(Exception e){
+            return false;
         }
     }
     private void saveFile() throws  IOException{
