@@ -20,8 +20,6 @@ public class Controller {
 
     @FXML
     private TextArea text_area;
-    static TextArea area;
-
 
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
@@ -50,16 +48,15 @@ public class Controller {
             String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
             path_actual = path_name;
             String fill_text = "";
-            area = text_area;
-            area.setText("");
+            text_area.setText("");
             if (path_name != null) {
                 BufferedReader br = new BufferedReader(new FileReader(path_name));
                 String strCurrentLine;
                 while ((strCurrentLine = br.readLine()) != null) {
                     fill_text += strCurrentLine + "\n";
                 }
-                area.appendText(fill_text);
-                last_text=area.getText();
+                text_area.appendText(fill_text);
+                last_text=text_area.getText();
                 creado = true;
             }else{
                 alert.setTitle("Open");
@@ -67,7 +64,6 @@ public class Controller {
                 alert.showAndWait();
             }
         }catch (Exception e){
-
         }
     }
 
@@ -125,8 +121,8 @@ public class Controller {
             fileChooser.setTitle("Nuevo archivo");
             area=text_area;
             path_actual = fileChooser.showSaveDialog(area.getScene().getWindow()).getPath();*/
-            area.setText("");
-            last_text=area.getText();
+            text_area.setText("");
+            last_text= text_area.getText();
             creado=false;
         }
     }
@@ -136,9 +132,8 @@ public class Controller {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         ButtonType btn_save;
         ButtonType btn_exit = new ButtonType("Salir");
-        area=text_area;
         if(creado){
-            if(last_text.equals(area.getText())){
+            if(last_text.equals(text_area.getText())){
                 System.exit(0);
             }else{
                 alert.setTitle("Antes de cerrar...");
@@ -182,22 +177,21 @@ public class Controller {
             File userDirectory = new File(initial_path);
             fileChooser.setInitialDirectory(userDirectory);
             fileChooser.setTitle("Guardar como");
-            area=text_area;
-            File fichero = fileChooser.showSaveDialog(area.getScene().getWindow());
+            File fichero = fileChooser.showSaveDialog(text_area.getScene().getWindow());
             path_actual =fichero.getPath();
             if(fichero != null) {
                 FileWriter fw = new FileWriter(fichero);
-                fw.write(area.getText());
+                fw.write(text_area.getText());
             }
-            last_text=area.getText();
+            last_text= text_area.getText();
             creado=true;
         }catch(Exception e){
         }
     }
     private void saveFile() throws  IOException{
         FileWriter fw = new FileWriter(path_actual,false);
-        fw.write(area.getText());
+        fw.write(text_area.getText());
         fw.close();
-        last_text=area.getText();
+        last_text= text_area.getText();
     }
 }

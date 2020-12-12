@@ -1,0 +1,26 @@
+{
+    "hidrogeno": 
+    {
+        "nombre": "Hidrogeno",
+        "abreviatura": "H",
+        "no_atomico": "1",
+        "masa_atomica": "1.00794",
+        "clasificacion": "no metales"
+    },
+    "helio":
+    {
+        "nombre": "Helio",
+        "abreviatura": "He",
+        "no_atomico": "2",
+        "masa_atomica": "4.002602",
+        "clasificacion": "gases nobles"
+    },
+    "litio":
+    {
+        "nombre": "Litio",
+        "abreviatura": "Li",
+        "no_atomico": "3",
+        "masa_atomica": "6.941",
+        "clasificacion": "alcalinos"
+    }
+}
