@@ -4,11 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.*;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -20,6 +17,9 @@ public class Controller {
 
     @FXML
     private TextArea text_area;
+
+    @FXML
+    private Button btn_grun;
 
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
@@ -38,6 +38,15 @@ public class Controller {
         );
         alert.setTitle("Error");
 
+    }
+    @FXML
+    private void mostrarArbol(){
+        try {
+            String cmd = "";
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException ioe) {
+            System.out.println (ioe);
+        }
     }
 
     @FXML
