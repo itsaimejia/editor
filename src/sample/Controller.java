@@ -51,6 +51,7 @@ public class Controller {
 
     }
 
+    //metodo que manda a llamar el .bat del grun para mostrar el arbol de la gramatica
     private void execGrun() throws IOException{
         //escribir sobre el archivo tel.txt
         FileWriter fw = new FileWriter("C:\\Javalib\\num_telefono\\tel.txt",false);
@@ -63,6 +64,7 @@ public class Controller {
         builder.start();
     }
 
+    //metodo que abre un filechooser para seleccionar un archivo
     @FXML
     private void onOpen() throws IOException
     {
