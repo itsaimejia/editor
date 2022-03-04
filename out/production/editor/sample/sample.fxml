@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="panel_principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #37424f;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="panel_principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="613.0" prefWidth="600.0" style="-fx-background-color: #37424f;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
         <AnchorPane fx:id="panel_barra" layoutX="-3.0" prefHeight="25.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -39,12 +39,16 @@
                 </MenuBar>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="panel_textArea" layoutX="27.0" layoutY="76.0" prefHeight="249.0" prefWidth="541.0">
+        <AnchorPane fx:id="panel_textInput" layoutX="27.0" layoutY="76.0" prefHeight="249.0" prefWidth="541.0">
             <children>
-                <TextArea fx:id="text_area" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="528.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <TextArea fx:id="text_Input" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="528.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
-      <Button id="btn_grun" layoutX="228.0" layoutY="333.0" mnemonicParsing="false" onAction="#mostrarArbol" prefHeight="25.0" prefWidth="154.0" text="Mostrar Arbol" />
-
+        <AnchorPane fx:id="panel_textOutput" layoutX="27.0" layoutY="377.0" prefHeight="164.0" prefWidth="541.0" style="-fx-background-color: grey;">
+            <children>
+                <TextArea fx:id="text_Output" layoutX="14.0" prefHeight="164.0" prefWidth="541.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            </children>
+        </AnchorPane>
+      <Button id="btn_Exec" layoutX="475.0" layoutY="44.0"  onAction="#mostrarArbol" prefHeight="25.0" prefWidth="93.0" text="Executar" />
     </children>
 </AnchorPane>

@@ -1,5 +1,7 @@
 package sample;
 
+import com.principal.MyVisitor;
+import com.principal.Principal;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,8 +18,9 @@ import java.util.Optional;
 public class Controller {
 
     @FXML
-    private TextArea text_area;
-
+    private TextArea text_Input;
+    @FXML
+    private TextArea text_Output;
 
     boolean creado =false;
     static FileChooser fileChooser = new FileChooser();
@@ -26,42 +29,41 @@ public class Controller {
     static String initial_path = System.getProperty("user.home");
     static String last_text;
 
-
     public Controller() {
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("PDF Files","*.pdf"),
                 new ExtensionFilter("dat Files","*.dat"),
                 new ExtensionFilter("all files",".")
         );
         alert.setTitle("Error");
-
     }
+
     @FXML
     private void mostrarArbol() throws  IOException{
-
         if (creado){
             saveFile();
-            execGrun();
+            execute();
         }else{
             if(saveAsFile())
-                execGrun();
-
+                execute();
         }
-
     }
 
-    //metodo que manda a llamar el .bat del grun para mostrar el arbol de la gramatica
-    private void execGrun() throws IOException{
-        //escribir sobre el archivo tel.txt
-        FileWriter fw = new FileWriter("C:\\Javalib\\num_telefono\\tel.txt",false);
-        fw.write(text_area.getText());
+
+    private void execute() throws IOException{
+        String file_in ="C:\\Javalib\\lib\\input.txt";
+        FileWriter fw = new FileWriter(file_in,false);
+        fw.write(text_Input.getText());
         fw.close();
 
-        //ejecutar comando cmd
-        ProcessBuilder builder = new ProcessBuilder( "cmd.exe", "/c", "cd \"C:\\Javalib\\num_telefono\"&& commando.bat");
-        builder.redirectErrorStream(true);
-        builder.start();
+        Principal antlr = new Principal();
+        antlr.ExecuteAntlr(file_in);
+
+        text_Output.clear();
+        for (String line: MyVisitor.output) {
+            text_Output.appendText("> "+line + "\n");
+        }
+        MyVisitor.output.clear();
     }
 
     //metodo que abre un filechooser para seleccionar un archivo
@@ -73,15 +75,15 @@ public class Controller {
             String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
             path_actual = path_name;
             String fill_text = "";
-            text_area.setText("");
+            text_Input.setText("");
             if (path_name != null) {
                 BufferedReader br = new BufferedReader(new FileReader(path_name));
                 String strCurrentLine;
                 while ((strCurrentLine = br.readLine()) != null) {
                     fill_text += strCurrentLine + "\n";
                 }
-                text_area.appendText(fill_text);
-                last_text=text_area.getText();
+                text_Input.appendText(fill_text);
+                last_text= text_Input.getText();
                 creado = true;
             }else{
                 alert.setTitle("Open");
@@ -142,8 +144,8 @@ public class Controller {
             }catch(Exception e){
             }
         } else if (result.get() == this_window) {
-            text_area.setText("");
-            last_text= text_area.getText();
+            text_Input.setText("");
+            last_text= text_Input.getText();
             creado=false;
         }
     }
@@ -154,7 +156,7 @@ public class Controller {
         ButtonType btn_save;
         ButtonType btn_exit = new ButtonType("Salir");
         if(creado){
-            if(last_text.equals(text_area.getText())){
+            if(last_text.equals(text_Input.getText())){
                 System.exit(0);
             }else{
                 alert.setTitle("Antes de cerrar...");
@@ -198,13 +200,13 @@ public class Controller {
             File userDirectory = new File(initial_path);
             fileChooser.setInitialDirectory(userDirectory);
             fileChooser.setTitle("Guardar como");
-            File fichero = fileChooser.showSaveDialog(text_area.getScene().getWindow());
+            File fichero = fileChooser.showSaveDialog(text_Input.getScene().getWindow());
             path_actual =fichero.getPath();
             if(fichero != null) {
                 FileWriter fw = new FileWriter(fichero);
-                fw.write(text_area.getText());
+                fw.write(text_Input.getText());
             }
-            last_text= text_area.getText();
+            last_text= text_Input.getText();
             creado=true;
             return true;
         }catch(Exception e){
@@ -213,8 +215,10 @@ public class Controller {
     }
     private void saveFile() throws  IOException{
         FileWriter fw = new FileWriter(path_actual,false);
-        fw.write(text_area.getText());
+        fw.write(text_Input.getText());
         fw.close();
-        last_text= text_area.getText();
+        last_text= text_Input.getText();
     }
+
+
 }
