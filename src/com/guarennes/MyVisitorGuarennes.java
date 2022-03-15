@@ -1,29 +1,37 @@
-package com.principal;
+package com.guarennes;
 
-import com.parser.CalculadoraBaseVisitor;
-import com.parser.CalculadoraParser;
 
-import java.io.FileWriter;
-import java.io.IOException;
+
+import com.guarennes.parser.GuarennesBaseVisitor;
+import com.guarennes.parser.GuarennesParser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MyVisitor extends CalculadoraBaseVisitor<Integer> {
+public class MyVisitorGuarennes extends GuarennesBaseVisitor<Integer> {
     public static HashMap<String, Integer> memory = new HashMap<>();
     public static List<String> output = new ArrayList<>();
 
     @Override
-    public Integer visitAsignacion(CalculadoraParser.AsignacionContext ctx) {
-        String id = ctx.ID().getText();
-        int value = visit(ctx.expr());
-        memory.put(id,value);
-
-        return value;
+    public Integer visitCuerpo(GuarennesParser.CuerpoContext ctx) {
+        for (int i =0; i<ctx.body().size(); i++){
+            visit(ctx.body(i));
+        }
+        return 0;
     }
 
     @Override
-    public Integer visitImpresion(CalculadoraParser.ImpresionContext ctx) {
+    public Integer visitAsignacion(GuarennesParser.AsignacionContext ctx) {
+        String id = ctx.ID().getText();
+        int value = visit(ctx.expr());
+        memory.put(id,value);
+        return value;
+    }
+
+
+    @Override
+    public Integer visitImpresion(GuarennesParser.ImpresionContext ctx) {
         Integer value = visit(ctx.expr());
         System.out.println(value);
         output.add(value.toString());
@@ -31,12 +39,12 @@ public class MyVisitor extends CalculadoraBaseVisitor<Integer> {
     }
 
     @Override
-    public Integer visitInt(CalculadoraParser.IntContext ctx) {
-        return Integer.valueOf(ctx.INT().getText());
+    public Integer visitNum(GuarennesParser.NumContext ctx) {
+        return Integer.valueOf(ctx.NUM().getText());
     }
 
     @Override
-    public Integer visitId(CalculadoraParser.IdContext ctx) {
+    public Integer visitId(GuarennesParser.IdContext ctx) {
 
         String id = ctx.ID().getText();
         if(memory.containsKey(id))
@@ -45,20 +53,20 @@ public class MyVisitor extends CalculadoraBaseVisitor<Integer> {
         return 0;
     }
     @Override
-    public Integer visitMultDiv(CalculadoraParser.MultDivContext ctx) {
+    public Integer visitMultDiv(GuarennesParser.MultDivContext ctx) {
         int left = visit(ctx.expr(0));
         int right = visit(ctx.expr(1));
 
-        if(ctx.op.getType() == CalculadoraParser.MULT)
+        if(ctx.op.getType() == GuarennesParser.MULT)
             return left * right;
         else
             return left / right;
     }
     @Override
-    public Integer visitSumSub(CalculadoraParser.SumSubContext ctx) {
+    public Integer visitSumSub(GuarennesParser.SumSubContext ctx) {
         int left = visit(ctx.expr(0));
         int right = visit(ctx.expr(1));
-        if(ctx.op.getType() == CalculadoraParser.SUM) {
+        if(ctx.op.getType() == GuarennesParser.SUM) {
             return left + right;
         }else {
             return left - right;
@@ -66,9 +74,7 @@ public class MyVisitor extends CalculadoraBaseVisitor<Integer> {
     }
 
     @Override
-    public Integer visitParentesis(CalculadoraParser.ParentesisContext ctx) {
+    public Integer visitParentesis(GuarennesParser.ParentesisContext ctx) {
         return visit(ctx.expr());
     }
-
-
 }

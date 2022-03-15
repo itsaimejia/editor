@@ -1,7 +1,12 @@
 package sample;
 
-import com.principal.MyVisitor;
-import com.principal.Principal;
+import com.calculadora.MyVisitorCalculadora;
+import com.guarennes.MyVisitorGuarennes;
+import com.guarennes.parser.GuarennesLexer;
+import com.guarennes.parser.GuarennesParser;
+import com.lenguaje.parser.LenguajeLexer;
+import com.lenguaje.parser.LenguajeParser;
+import com.lenguaje.MyVisitorLenguaje;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +16,10 @@ import javafx.scene.control.Alert.*;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.*;
 import java.util.Optional;
@@ -22,7 +31,9 @@ public class Controller {
     @FXML
     private TextArea text_Output;
 
+
     boolean creado =false;
+    boolean traducido =false;
     static FileChooser fileChooser = new FileChooser();
     static String path_actual;
     static Alert alert = new Alert(AlertType.WARNING);
@@ -38,32 +49,90 @@ public class Controller {
         alert.setTitle("Error");
     }
 
-    @FXML
-    private void mostrarArbol() throws  IOException{
-        if (creado){
-            saveFile();
-            execute();
-        }else{
-            if(saveAsFile())
-                execute();
+
+    public boolean validTranstale(String file_in) throws IOException {
+        CharStream input = CharStreams.fromFileName(file_in);
+        LenguajeLexer lexico = new LenguajeLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexico);
+        LenguajeParser sintactico = new LenguajeParser(tokens);
+        ParseTree arbol = sintactico.program();
+        try{
+            MyVisitorLenguaje visitas = new MyVisitorLenguaje();
+            visitas.visit(arbol);
+            traducido=true;
+            return true;
+        }catch (Exception e){
+            System.out.println(e);
+            text_Output.appendText("No se puso traducir");
+            return false;
         }
     }
-
-
-    private void execute() throws IOException{
+    private void write() throws IOException{
         String file_in ="C:\\Javalib\\lib\\input.txt";
         FileWriter fw = new FileWriter(file_in,false);
         fw.write(text_Input.getText());
         fw.close();
-
-        Principal antlr = new Principal();
-        antlr.ExecuteAntlr(file_in);
-
-        text_Output.clear();
-        for (String line: MyVisitor.output) {
-            text_Output.appendText("> "+line + "\n");
+        saveFile();
+        if(validTranstale(file_in)){
+            text_Input.clear();
+            for (String line: MyVisitorLenguaje.newSentence) {
+                text_Input.appendText(line + "\n");
+            }
+            MyVisitorLenguaje.newSentence.clear();
         }
-        MyVisitor.output.clear();
+
+    }
+
+    @FXML
+    private void translate() throws  IOException{
+        if (creado){
+            saveFile();
+            write();
+        }else{
+            if(saveAsFile())
+                write();
+        }
+    }
+    public boolean validInputGuarennes(String file_in) throws IOException {
+        CharStream input = CharStreams.fromFileName(file_in);
+        GuarennesLexer lexico = new GuarennesLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexico);
+        GuarennesParser sintactico = new GuarennesParser(tokens);
+        ParseTree arbol = sintactico.program();
+        try {
+            MyVisitorGuarennes visitas = new MyVisitorGuarennes();
+            visitas.visit(arbol);
+            return true;
+        } catch (ArithmeticException e) {
+            System.out.println(e);
+            text_Output.appendText("No se puede dividir entre 0");
+            return false;
+        }
+    }
+    private void resolve() throws IOException{
+        String file_in ="C:\\Javalib\\lib\\input.txt";
+        FileWriter fw = new FileWriter(file_in,false);
+        fw.write(text_Input.getText());
+        fw.close();
+        saveFile();
+        if(validInputGuarennes(file_in)){
+            text_Output.clear();
+            for (String line: MyVisitorGuarennes.output) {
+                text_Output.appendText("> "+line + "\n");
+            }
+            MyVisitorGuarennes.output.clear();
+        }
+
+    }
+    @FXML
+    private void execute() throws  IOException{
+        if (creado){
+            saveFile();
+            resolve();
+        }else{
+            if(saveAsFile())
+                resolve();
+        }
     }
 
     //metodo que abre un filechooser para seleccionar un archivo

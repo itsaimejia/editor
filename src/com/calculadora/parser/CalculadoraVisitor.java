@@ -1,5 +1,5 @@
 // Generated from .\Calculadora.g4 by ANTLR 4.9.2
-package com.parser;
+package com.calculadora.parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
