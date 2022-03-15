@@ -32,6 +32,11 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     }
 
     @Override
+    public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
+        return "tangananica " +ctx.ID() + "="+visit(ctx.expr()) +';';
+    }
+
+    @Override
     public String visitImpresion(LenguajeParser.ImpresionContext ctx) {
         return "tanganana(" + visit(ctx.expr()) + ");";
     }
@@ -48,13 +53,11 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitMultDiv(LenguajeParser.MultDivContext ctx) {
-        String op = (ctx.op.getType() == LenguajeParser.MULT) ? "*":"/";
-        return visit(ctx.expr(0)) + op + visit(ctx.expr(1));
+        return visit(ctx.expr(0)) + ((ctx.op.getType() == LenguajeParser.MULT) ? "*":"/") + visit(ctx.expr(1));
     }
 
     @Override
     public String visitSumSub(LenguajeParser.SumSubContext ctx) {
-        String op = (ctx.op.getType() == LenguajeParser.SUM) ? "+":"-";
-        return visit(ctx.expr(0)) + op +visit(ctx.expr(1));
+        return visit(ctx.expr(0)) + ((ctx.op.getType() == LenguajeParser.SUM) ? "+":"-") +visit(ctx.expr(1));
     }
 }

@@ -22,6 +22,14 @@ public class MyVisitorGuarennes extends GuarennesBaseVisitor<Integer> {
     }
 
     @Override
+    public Integer visitAsigDeclar(GuarennesParser.AsigDeclarContext ctx) {
+        String id = ctx.ID().getText();
+        int value = visit(ctx.expr());
+        memory.put(id,value);
+        return value;
+    }
+
+    @Override
     public Integer visitAsignacion(GuarennesParser.AsignacionContext ctx) {
         String id = ctx.ID().getText();
         int value = visit(ctx.expr());
