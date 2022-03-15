@@ -44,7 +44,8 @@ public class Controller {
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("dat Files","*.dat"),
-                new ExtensionFilter("all files",".")
+                new ExtensionFilter("cpp files","*.cpp"),
+                new ExtensionFilter("all files","*.*")
         );
         alert.setTitle("Error");
     }
