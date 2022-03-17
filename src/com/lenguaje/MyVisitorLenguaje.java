@@ -9,36 +9,41 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public static List<String> newSentence = new ArrayList<>();
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
-        System.out.println("__func initial():");
-        newSentence.add("__func initial():");
+        System.out.println("# initial<>|");
+        newSentence.add("#initial<>|");
         for (int i=0; i< ctx.body().size(); i++){
             newSentence.add(visit(ctx.body(i)));
             System.out.println(visit(ctx.body(i)));
         }
-        newSentence.add("func__");
-        System.out.println("func__");
+        newSentence.add("|");
+        System.out.println("|");
         return null;
     }
 
     @Override
     public String visitDeclaracion(LenguajeParser.DeclaracionContext ctx) {
-        return "tangananica "+ ctx.ID() +';';
+        return "decimalnt "+ ctx.ID() +'!';
 
     }
 
     @Override
     public String visitAsignacion(LenguajeParser.AsignacionContext ctx) {
-        return ctx.getText();
+        return ctx.ID().getText() + "="+ visit(ctx.expr())+'!';
     }
 
     @Override
     public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
-        return "tangananica " +ctx.ID() + "="+visit(ctx.expr()) +';';
+        return "decimalnt " +ctx.ID() + "="+visit(ctx.expr()) +'!';
     }
 
     @Override
     public String visitImpresion(LenguajeParser.ImpresionContext ctx) {
-        return "tanganana(" + visit(ctx.expr()) + ");";
+        return "systalk<" + visit(ctx.expr()) + ">!";
+    }
+
+    @Override
+    public String visitParentesis(LenguajeParser.ParentesisContext ctx) {
+        return '<' + visit(ctx.expr()) +'>';
     }
 
     @Override

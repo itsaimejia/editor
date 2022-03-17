@@ -1,12 +1,11 @@
 package sample;
 
-import com.calculadora.MyVisitorCalculadora;
-import com.guarennes.MyVisitorGuarennes;
-import com.guarennes.parser.GuarennesLexer;
-import com.guarennes.parser.GuarennesParser;
+import com.opmez.MyVisitorOpmez;
 import com.lenguaje.parser.LenguajeLexer;
 import com.lenguaje.parser.LenguajeParser;
 import com.lenguaje.MyVisitorLenguaje;
+import com.opmez.parser.OpmezLexer;
+import com.opmez.parser.OpmezParser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -44,7 +43,7 @@ public class Controller {
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("dat Files","*.dat"),
-                new ExtensionFilter("cpp files","*.cpp"),
+                new ExtensionFilter("c files","*.c"),
                 new ExtensionFilter("all files","*.*")
         );
         alert.setTitle("Error");
@@ -94,14 +93,14 @@ public class Controller {
                 write();
         }
     }
-    public boolean validInputGuarennes(String file_in) throws IOException {
+    public boolean validInputOpmez(String file_in) throws IOException {
         CharStream input = CharStreams.fromFileName(file_in);
-        GuarennesLexer lexico = new GuarennesLexer(input);
+        OpmezLexer lexico = new OpmezLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexico);
-        GuarennesParser sintactico = new GuarennesParser(tokens);
+        OpmezParser sintactico = new OpmezParser(tokens);
         ParseTree arbol = sintactico.program();
         try {
-            MyVisitorGuarennes visitas = new MyVisitorGuarennes();
+            MyVisitorOpmez visitas = new MyVisitorOpmez();
             visitas.visit(arbol);
             return true;
         } catch (ArithmeticException e) {
@@ -116,12 +115,12 @@ public class Controller {
         fw.write(text_Input.getText());
         fw.close();
         saveFile();
-        if(validInputGuarennes(file_in)){
+        if(validInputOpmez(file_in)){
             text_Output.clear();
-            for (String line: MyVisitorGuarennes.output) {
+            for (String line: MyVisitorOpmez.output) {
                 text_Output.appendText("> "+line + "\n");
             }
-            MyVisitorGuarennes.output.clear();
+            MyVisitorOpmez.output.clear();
         }
 
     }

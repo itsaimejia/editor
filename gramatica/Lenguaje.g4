@@ -34,6 +34,7 @@ DIV:'/';
 SUM:'+';
 SUB:'-';
 NUM:[0-9]+;
-ID:[a-zA-Z]+;
-
+ID:[a-zA-Z]+[a-zA-Z0-9]*;
+LINECOM: '//' .*?  '\n' -> skip;
+MULTILINECOM: '/*' .*? '*/' -> skip;
 WS:[ \t\r\n]+ -> skip;

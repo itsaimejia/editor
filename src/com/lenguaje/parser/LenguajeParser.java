@@ -18,7 +18,8 @@ public class LenguajeParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, VOID=7, MAIN=8, PRINTF=9, 
-		INT=10, MULT=11, DIV=12, SUM=13, SUB=14, NUM=15, ID=16, WS=17;
+		INT=10, MULT=11, DIV=12, SUM=13, SUB=14, NUM=15, ID=16, LINECOM=17, MULTILINECOM=18, 
+		WS=19;
 	public static final int
 		RULE_program = 0, RULE_file = 1, RULE_body = 2, RULE_expr = 3;
 	private static String[] makeRuleNames() {
@@ -38,7 +39,8 @@ public class LenguajeParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, "VOID", "MAIN", "PRINTF", "INT", 
-			"MULT", "DIV", "SUM", "SUB", "NUM", "ID", "WS"
+			"MULT", "DIV", "SUM", "SUB", "NUM", "ID", "LINECOM", "MULTILINECOM", 
+			"WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -561,7 +563,7 @@ public class LenguajeParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\23D\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25D\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\7\3\23\n\3\f\3\16\3"+
 		"\26\13\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3"+
 		"\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4.\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5\67"+
