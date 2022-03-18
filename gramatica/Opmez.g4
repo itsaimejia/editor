@@ -42,4 +42,5 @@ ID:[a-zA-Z]+[a-zA-Z0-9]*;
 
 LINECOM: '@' .*?  '\n' -> skip;
 MULTILINECOM: '@{' .*? '}@' -> skip;
+
 WS:[ \t\r\n]+ -> skip;

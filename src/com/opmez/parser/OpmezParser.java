@@ -19,7 +19,7 @@ public class OpmezParser extends Parser {
 	public static final int
 		T__0=1, DEFINEFUNC=2, KEYSOC=3, ARROWOPEN=4, ARROWCLOSE=5, INITIAL=6, 
 		ENDLINE=7, PRINT=8, INT=9, MULT=10, DIV=11, SUM=12, SUB=13, NUM=14, ID=15, 
-		WS=16;
+		LINECOM=16, MULTILINECOM=17, WS=18;
 	public static final int
 		RULE_program = 0, RULE_body = 1, RULE_expr = 2;
 	private static String[] makeRuleNames() {
@@ -40,7 +40,7 @@ public class OpmezParser extends Parser {
 		return new String[] {
 			null, null, "DEFINEFUNC", "KEYSOC", "ARROWOPEN", "ARROWCLOSE", "INITIAL", 
 			"ENDLINE", "PRINT", "INT", "MULT", "DIV", "SUM", "SUB", "NUM", "ID", 
-			"WS"
+			"LINECOM", "MULTILINECOM", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -535,7 +535,7 @@ public class OpmezParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\22>\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24>\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\3\2\3\2\3\2\3\2\3\2\3\2\7\2\17\n\2\f\2\16\2\22\13\2\3\2\3\2"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\5\3(\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4\61\n\4\3\4\3\4\3\4\3\4\3\4"+
