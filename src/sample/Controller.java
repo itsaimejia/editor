@@ -93,35 +93,31 @@ public class Controller {
                 write();
         }
     }
-    public boolean validInputOpmez(String file_in) throws IOException {
-        CharStream input = CharStreams.fromFileName(file_in);
-        OpmezLexer lexico = new OpmezLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexico);
-        OpmezParser sintactico = new OpmezParser(tokens);
-        ParseTree arbol = sintactico.program();
+    public void inputOpmez(String file_in) throws IOException {
+        PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         try {
-            MyVisitorOpmez visitas = new MyVisitorOpmez();
+            CharStream input = CharStreams.fromFileName(file_in);
+            OpmezLexer lexico = new OpmezLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexico);
+            OpmezParser sintactico = new OpmezParser(tokens);
+            ParseTree arbol = sintactico.program();
+            MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
             visitas.visit(arbol);
-            return true;
+            MyVisitorOpmez.memory.clear();
         } catch (ArithmeticException e) {
             System.out.println(e);
-            text_Output.appendText("No se puede dividir entre 0");
-            return false;
+            System.out.println("No se puede dividir entre 0");
         }
     }
     private void resolve() throws IOException{
+
         String file_in ="C:\\Javalib\\lib\\input.txt";
         FileWriter fw = new FileWriter(file_in,false);
         fw.write(text_Input.getText());
         fw.close();
         saveFile();
-        if(validInputOpmez(file_in)){
-            text_Output.clear();
-            for (String line: MyVisitorOpmez.output) {
-                text_Output.appendText("> "+line + "\n");
-            }
-            MyVisitorOpmez.output.clear();
-        }
+        text_Output.clear();
+        inputOpmez(file_in);
 
     }
     @FXML
@@ -291,3 +287,4 @@ public class Controller {
 
 
 }
+

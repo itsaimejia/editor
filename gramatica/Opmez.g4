@@ -1,17 +1,48 @@
 grammar Opmez;
 
-program: DEFINEFUNC INITIAL ARROWOPEN ARROWCLOSE KEYSOC body* KEYSOC #cuerpo;
+program: DEFINEFUNC INITIAL PO PC KO body* KC #cuerpo;
 
 
 body:
-    PRINT expr  ENDLINE #impresion
+    PRINT expr  SCOL #impresion
     |
-    INT ID '=' expr ENDLINE #asigDeclar
+    if_sentence else_sentence? #ifElse
     |
-    INT ID ENDLINE #declaracion
+    INT ID SCOL #declaracion
     |
-    ID '=' expr ENDLINE #asignacion
+    ID ASSIGN expr SCOL #asignacion
+    |
+    INT ID ASSIGN expr SCOL #asigDeclar
     ;
+
+if_sentence: IF PO condition PC KO body* KC #sentenciaIf;
+else_sentence: ELSE KO body* KC #sentenciaElse;
+
+condition:
+    NOT condition #condicionNegacion
+    |
+    expr op=(EQT|NEQT) expr #condicionesIgualdadExpr
+    |
+    condition op=(EQT|NEQT) condition #condicionesIgualdad
+    |
+    expr op=(GT|LT) expr #condicionesMayMen
+    |
+    expr op=(GEQT|LEQT) expr #condicionesMayMenIgual
+    |
+    condition AND condition #condicionY
+    |
+    condition OR condition #condicionO
+    |
+    TRUE #verdadero
+    |
+    FALSE #falso
+    |
+    PO condition PC #condicionParentesis
+    |
+    expr #expresion
+    ;
+
+
 
 expr:
     expr op=(MULT|DIV) expr #multDiv
@@ -22,24 +53,38 @@ expr:
     |
     ID #id
     |
-    ARROWOPEN expr ARROWCLOSE #parentesis
+    PO expr PC #parentesis
     ;
 
 DEFINEFUNC: '#';
-KEYSOC:'|';
-ARROWOPEN: '<';
-ARROWCLOSE:'>';
 INITIAL:'initial';
-ENDLINE:'!';
+KO:'{';
+KC:'}';
+PO: '(';
+PC:')';
+IF:'if';
+ELSE:'else';
+SCOL:';';
+ASSIGN:'=';
 PRINT:'systalk';
 INT:'decimalnt';
+EQT:'==';
+NEQT:'!=';
+GT:'>';
+LT:'<';
+GEQT:'>=';
+LEQT:'<=';
+AND:'&&';
+OR:'||';
+TRUE:'true';
+FALSE:'false';
+NOT:'!';
 MULT:'*';
 DIV:'/';
 SUM:'+';
 SUB:'-';
 NUM:[0-9]+;
 ID:[a-zA-Z]+[a-zA-Z0-9]*;
-
 LINECOM: '@' .*?  '\n' -> skip;
 MULTILINECOM: '@{' .*? '}@' -> skip;
 

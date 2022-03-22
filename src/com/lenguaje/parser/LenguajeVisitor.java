@@ -31,6 +31,13 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitImpresion(LenguajeParser.ImpresionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ifElse}
+	 * labeled alternative in {@link LenguajeParser#body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfElse(LenguajeParser.IfElseContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code asigDeclar}
 	 * labeled alternative in {@link LenguajeParser#body}.
 	 * @param ctx the parse tree
@@ -51,6 +58,97 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAsignacion(LenguajeParser.AsignacionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code sentenceIf}
+	 * labeled alternative in {@link LenguajeParser#if_sentence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSentenceIf(LenguajeParser.SentenceIfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code sentenciaElse}
+	 * labeled alternative in {@link LenguajeParser#else_sentence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSentenciaElse(LenguajeParser.SentenciaElseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code cero}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCero(LenguajeParser.CeroContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expresion}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpresion(LenguajeParser.ExpresionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionNegacion}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionNegacion(LenguajeParser.CondicionNegacionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionParentesis}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionParentesis(LenguajeParser.CondicionParentesisContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code falso}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFalso(LenguajeParser.FalsoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionesIgualdad}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionesIgualdad(LenguajeParser.CondicionesIgualdadContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code uno}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUno(LenguajeParser.UnoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionO}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionO(LenguajeParser.CondicionOContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionY}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionY(LenguajeParser.CondicionYContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code verdadero}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVerdadero(LenguajeParser.VerdaderoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionesRelacional}
+	 * labeled alternative in {@link LenguajeParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionesRelacional(LenguajeParser.CondicionesRelacionalContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parentesis}
 	 * labeled alternative in {@link LenguajeParser#expr}.

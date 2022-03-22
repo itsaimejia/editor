@@ -25,12 +25,12 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitImpresion(OpmezParser.ImpresionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code asigDeclar}
+	 * Visit a parse tree produced by the {@code ifElse}
 	 * labeled alternative in {@link OpmezParser#body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAsigDeclar(OpmezParser.AsigDeclarContext ctx);
+	T visitIfElse(OpmezParser.IfElseContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code declaracion}
 	 * labeled alternative in {@link OpmezParser#body}.
@@ -45,6 +45,104 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAsignacion(OpmezParser.AsignacionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code asigDeclar}
+	 * labeled alternative in {@link OpmezParser#body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAsigDeclar(OpmezParser.AsigDeclarContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code sentenciaIf}
+	 * labeled alternative in {@link OpmezParser#if_sentence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSentenciaIf(OpmezParser.SentenciaIfContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code sentenciaElse}
+	 * labeled alternative in {@link OpmezParser#else_sentence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSentenciaElse(OpmezParser.SentenciaElseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expresion}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpresion(OpmezParser.ExpresionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionNegacion}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionNegacion(OpmezParser.CondicionNegacionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionParentesis}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionParentesis(OpmezParser.CondicionParentesisContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionesMayMen}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionesMayMen(OpmezParser.CondicionesMayMenContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code falso}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFalso(OpmezParser.FalsoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionesIgualdad}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionesIgualdad(OpmezParser.CondicionesIgualdadContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionO}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionO(OpmezParser.CondicionOContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionY}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionY(OpmezParser.CondicionYContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionesIgualdadExpr}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionesIgualdadExpr(OpmezParser.CondicionesIgualdadExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code condicionesMayMenIgual}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionesMayMenIgual(OpmezParser.CondicionesMayMenIgualContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code verdadero}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVerdadero(OpmezParser.VerdaderoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parentesis}
 	 * labeled alternative in {@link OpmezParser#expr}.
