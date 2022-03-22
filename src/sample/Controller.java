@@ -39,7 +39,10 @@ public class Controller {
     static String initial_path = System.getProperty("user.home");
     static String last_text;
 
+
+
     public Controller() {
+
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("dat Files","*.dat"),
@@ -105,8 +108,8 @@ public class Controller {
             visitas.visit(arbol);
             MyVisitorOpmez.memory.clear();
         } catch (ArithmeticException e) {
-            System.out.println(e);
-            System.out.println("No se puede dividir entre 0");
+            ps.println(e);
+            ps.println("No se puede dividir entre 0");
         }
     }
     private void resolve() throws IOException{

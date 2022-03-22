@@ -6,7 +6,7 @@ file: VOID MAIN PO PC KO body* KC #archivo;
 body:
     PRINTF  PO expr PC  SCOL #impresion
     |
-    if_sentence else_sentence? #ifElse
+    if_sentence (elif_sentence | else_sentence)? #ifElse
     |
     INT ID ASSIGN expr SCOL #asigDeclar
     |
@@ -14,7 +14,7 @@ body:
     |
     ID ASSIGN expr SCOL #asignacion
     ;
-
+elif_sentence: ELSE if_sentence #sentenciaElif;
 if_sentence: IF PO condition PC KO body* KC #sentenceIf;
 else_sentence: ELSE KO body* KC #sentenciaElse;
 
@@ -33,10 +33,6 @@ condition:
     |
     FALSE #falso
     |
-    ONE #uno
-    |
-    ZERO #cero
-    |
     PO condition PC #condicionParentesis
     |
     expr #expresion
@@ -48,7 +44,7 @@ expr:
     |
     expr op=(SUM|SUB) expr #sumSub
     |
-    NUM #num
+    SUB? NUM #num
     |
     ID #id
     |
@@ -81,8 +77,6 @@ AND:'&&';
 OR:'||';
 TRUE:'true';
 FALSE:'false';
-ZERO: '0';
-ONE:'1';
 NOT:'!';
 NUM:[0-9]+;
 ID:[a-zA-Z]+[a-zA-Z0-9]*;

@@ -65,7 +65,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitNum(OpmezParser.NumContext ctx) {
-        return Integer.valueOf(ctx.NUM().getText());
+        return Integer.valueOf(ctx.getText());
     }
 
     @Override
@@ -104,7 +104,30 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         try{
             boolean result= (boolean) visit(ctx.if_sentence());
             if(!result){
-                visit(ctx.else_sentence());
+                if(ctx.else_sentence()!=null){
+                    visit(ctx.else_sentence());
+                }else{
+                    visit(ctx.elif_sentence());
+                }
+
+            }
+        }catch (Exception e){
+            ps.println("Error: "+e);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
+        try{
+            boolean result= (boolean) visit(ctx.if_sentence());
+            if(!result){
+                if(ctx.else_sentence()!=null){
+                    visit(ctx.else_sentence());
+                }else{
+                    visit(ctx.elif_sentence());
+                }
+
             }
         }catch (Exception e){
             ps.println("Error: "+e);

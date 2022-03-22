@@ -2,15 +2,18 @@ package com.lenguaje;
 
 import com.lenguaje.parser.LenguajeBaseVisitor;
 import com.lenguaje.parser.LenguajeParser;
+
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public static List<String> newSentence = new ArrayList<>();
+
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
         //System.out.println("# initial->");
-        newSentence.add("#initial->");
+        newSentence.add("#initial()->");
         for (int i=0; i< ctx.body().size(); i++){
             newSentence.add(visit(ctx.body(i)));
             //System.out.println(visit(ctx.body(i)));
@@ -38,7 +41,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitImpresion(LenguajeParser.ImpresionContext ctx) {
-        System.out.println(ctx.children);
         return "systalk(" + visit(ctx.expr()) + ");";
     }
 
@@ -49,7 +51,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitNum(LenguajeParser.NumContext ctx) {
-        return ctx.NUM().getText();
+        return ctx.getText();
     }
 
     @Override
@@ -130,15 +132,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
         return ctx.getText();
     }
 
-    @Override
-    public String visitUno(LenguajeParser.UnoContext ctx) {
-        return ctx.getText();
-    }
-
-    @Override
-    public String visitCero(LenguajeParser.CeroContext ctx) {
-        return ctx.getText();
-    }
 
     @Override
     public String visitCondicionParentesis(LenguajeParser.CondicionParentesisContext ctx) {

@@ -73,13 +73,6 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSentenciaElse(LenguajeParser.SentenciaElseContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code cero}
-	 * labeled alternative in {@link LenguajeParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCero(LenguajeParser.CeroContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code expresion}
 	 * labeled alternative in {@link LenguajeParser#condition}.
 	 * @param ctx the parse tree
@@ -114,13 +107,6 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCondicionesIgualdad(LenguajeParser.CondicionesIgualdadContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code uno}
-	 * labeled alternative in {@link LenguajeParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUno(LenguajeParser.UnoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code condicionO}
 	 * labeled alternative in {@link LenguajeParser#condition}.

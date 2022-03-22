@@ -6,7 +6,7 @@ program: DEFINEFUNC INITIAL PO PC KO body* KC #cuerpo;
 body:
     PRINT expr  SCOL #impresion
     |
-    if_sentence else_sentence? #ifElse
+    if_sentence (elif_sentence | else_sentence)? #ifElse
     |
     INT ID SCOL #declaracion
     |
@@ -15,6 +15,7 @@ body:
     INT ID ASSIGN expr SCOL #asigDeclar
     ;
 
+elif_sentence: ELSE if_sentence (elif_sentence | else_sentence)? #sentenciaElif;
 if_sentence: IF PO condition PC KO body* KC #sentenciaIf;
 else_sentence: ELSE KO body* KC #sentenciaElse;
 
@@ -49,7 +50,7 @@ expr:
     |
     expr op=(SUM|SUB) expr #sumSub
     |
-    NUM #num
+    SUB? NUM #num
     |
     ID #id
     |
@@ -58,8 +59,8 @@ expr:
 
 DEFINEFUNC: '#';
 INITIAL:'initial';
-KO:'{';
-KC:'}';
+KO:'->';
+KC:'<-';
 PO: '(';
 PC:')';
 IF:'if';
