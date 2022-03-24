@@ -59,6 +59,13 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAsignacion(LenguajeParser.AsignacionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code sentenciaElif}
+	 * labeled alternative in {@link LenguajeParser#elif_sentence}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSentenciaElif(LenguajeParser.SentenciaElifContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code sentenceIf}
 	 * labeled alternative in {@link LenguajeParser#if_sentence}.
 	 * @param ctx the parse tree

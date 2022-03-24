@@ -60,6 +60,13 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSentenciaElif(OpmezParser.SentenciaElifContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code condicionElif}
+	 * labeled alternative in {@link OpmezParser#elif_frag_condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondicionElif(OpmezParser.CondicionElifContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code sentenciaIf}
 	 * labeled alternative in {@link OpmezParser#if_sentence}.
 	 * @param ctx the parse tree
@@ -102,13 +109,6 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCondicionesMayMen(OpmezParser.CondicionesMayMenContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code falso}
-	 * labeled alternative in {@link OpmezParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFalso(OpmezParser.FalsoContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code condicionesIgualdad}
 	 * labeled alternative in {@link OpmezParser#condition}.
 	 * @param ctx the parse tree
@@ -144,19 +144,19 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCondicionesMayMenIgual(OpmezParser.CondicionesMayMenIgualContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code verdadero}
-	 * labeled alternative in {@link OpmezParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVerdadero(OpmezParser.VerdaderoContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code parentesis}
 	 * labeled alternative in {@link OpmezParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParentesis(OpmezParser.ParentesisContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code numero}
+	 * labeled alternative in {@link OpmezParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumero(OpmezParser.NumeroContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code multDiv}
 	 * labeled alternative in {@link OpmezParser#expr}.
@@ -172,12 +172,12 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSumSub(OpmezParser.SumSubContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code num}
+	 * Visit a parse tree produced by the {@code falso}
 	 * labeled alternative in {@link OpmezParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNum(OpmezParser.NumContext ctx);
+	T visitFalso(OpmezParser.FalsoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code id}
 	 * labeled alternative in {@link OpmezParser#expr}.
@@ -185,4 +185,11 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId(OpmezParser.IdContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code verdadero}
+	 * labeled alternative in {@link OpmezParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVerdadero(OpmezParser.VerdaderoContext ctx);
 }

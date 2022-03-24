@@ -4,18 +4,19 @@ program: DEFINEFUNC INITIAL PO PC KO body* KC #cuerpo;
 
 
 body:
-    PRINT expr  SCOL #impresion
+    PRINT PO expr PC SCOL #impresion
     |
     if_sentence (elif_sentence | else_sentence)? #ifElse
     |
-    INT ID SCOL #declaracion
+    DECLARE ID SCOL #declaracion
     |
     ID ASSIGN expr SCOL #asignacion
     |
-    INT ID ASSIGN expr SCOL #asigDeclar
+    DECLARE ID ASSIGN expr SCOL #asigDeclar
     ;
 
-elif_sentence: ELSE if_sentence (elif_sentence | else_sentence)? #sentenciaElif;
+elif_sentence: elif_frag_condition (elif_sentence | else_sentence)? #sentenciaElif;
+elif_frag_condition: ELIF PO condition PC KO body* KC #condicionElif;
 if_sentence: IF PO condition PC KO body* KC #sentenciaIf;
 else_sentence: ELSE KO body* KC #sentenciaElse;
 
@@ -34,14 +35,11 @@ condition:
     |
     condition OR condition #condicionO
     |
-    TRUE #verdadero
-    |
-    FALSE #falso
-    |
     PO condition PC #condicionParentesis
     |
     expr #expresion
     ;
+
 
 
 
@@ -50,12 +48,17 @@ expr:
     |
     expr op=(SUM|SUB) expr #sumSub
     |
-    SUB? NUM #num
+    SUB? op=(INT| DOUBLE) #numero
     |
-    ID #id
+    SUB? ID #id
+    |
+    TRUE #verdadero
+    |
+    FALSE #falso
     |
     PO expr PC #parentesis
     ;
+
 
 DEFINEFUNC: '#';
 INITIAL:'initial';
@@ -65,10 +68,11 @@ PO: '(';
 PC:')';
 IF:'if';
 ELSE:'else';
+ELIF:'elif';
 SCOL:';';
 ASSIGN:'=';
 PRINT:'systalk';
-INT:'decimalnt';
+DECLARE:'use';
 EQT:'==';
 NEQT:'!=';
 GT:'>';
@@ -84,7 +88,8 @@ MULT:'*';
 DIV:'/';
 SUM:'+';
 SUB:'-';
-NUM:[0-9]+;
+INT:[0-9]+;
+DOUBLE: [0-9]+'.'[0-9]+?;
 ID:[a-zA-Z]+[a-zA-Z0-9]*;
 LINECOM: '@' .*?  '\n' -> skip;
 MULTILINECOM: '@{' .*? '}@' -> skip;

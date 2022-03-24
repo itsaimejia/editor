@@ -12,20 +12,17 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
-        //System.out.println("# initial->");
         newSentence.add("#initial()->");
         for (int i=0; i< ctx.body().size(); i++){
             newSentence.add(visit(ctx.body(i)));
-            //System.out.println(visit(ctx.body(i)));
         }
         newSentence.add("<-");
-        //System.out.println("<-");
         return null;
     }
 
     @Override
     public String visitDeclaracion(LenguajeParser.DeclaracionContext ctx) {
-        return "decimalnt "+ ctx.ID() +';';
+        return "use "+ ctx.ID() +';';
 
     }
 
@@ -36,7 +33,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
-        return "decimalnt " +ctx.ID() + "="+visit(ctx.expr()) +';';
+        return "use " +ctx.ID() + "="+visit(ctx.expr()) +';';
     }
 
     @Override
@@ -73,10 +70,13 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public String visitIfElse(LenguajeParser.IfElseContext ctx) {
         String lineIf = visit(ctx.if_sentence());
         String lineElse="";
+        String lineElif="";
         if(ctx.else_sentence()!=null){
             lineElse=visit(ctx.else_sentence());
+        }else if(ctx.elif_sentence()!=null){
+            lineElif=visit(ctx.elif_sentence());
         }
-        return  lineIf + lineElse ;
+        return  lineIf+ lineElse +lineElif ;
     }
 
     @Override
@@ -95,6 +95,10 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             sb.append(visit(ctx.body(i))+"\n");
         }
         return "else->\n"+sb+"<-";
+    }
+    @Override
+    public String visitSentenciaElif(LenguajeParser.SentenciaElifContext ctx) {
+        return "el"+visit(ctx.if_sentence());
     }
 
     @Override
