@@ -19,7 +19,8 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitCuerpo(OpmezParser.CuerpoContext ctx) {
         try{
             for (int i = 0; i < ctx.body().size(); i++) {
-                visit(ctx.body(i));
+                Object current = visit(ctx.body(i));
+
             }
         }catch (Exception e){
             ps.println(e);
@@ -45,11 +46,15 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitAsignacion(OpmezParser.AsignacionContext ctx) {
         String id = ctx.ID().getText();
-        if(memory.containsKey(id)){
-            Object value = visit(ctx.expr());
-            memory.put(id,value);
-            return value;
-        }else{
+        try{
+            if(memory.containsKey(id)){
+                Object value = visit(ctx.expr());
+                memory.put(id,value);
+                return value;
+            }else{
+                throw new RuntimeException(id + " no esta declarada");
+            }
+        }catch (Exception e){
             return null;
         }
     }
@@ -59,7 +64,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
         Object result = visit(ctx.expr());
         ps.println(result);
-        return null;
+        return 1;
     }
 
     @Override
@@ -79,8 +84,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
             if(memory.containsKey(id)){
                 return memory.get(id);
             }else{
-                ps.println(ctx.ID().getText()+" no esta definida");
-                return null;
+                throw new RuntimeException(ctx.ID().getText()+" no esta definida");
             }
         }catch (Exception e){
             ps.println(e);
@@ -146,7 +150,6 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         }catch(Exception e){
             ps.println("Algo fallo en: if("+ctx.condition().getText()+")");
             return null;
-
         }
     }
 
