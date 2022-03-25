@@ -59,7 +59,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
         Object result = visit(ctx.expr());
         ps.println(result);
-        return true;
+        return null;
     }
 
     @Override
