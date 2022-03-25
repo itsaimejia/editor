@@ -14,7 +14,7 @@ body:
     |
     ID ASSIGN expr SCOL #asignacion
     ;
-elif_sentence: ELSE if_sentence #sentenciaElif;
+elif_sentence: ELSE if_sentence (elif_sentence | else_sentence)? #sentenciaElif;
 if_sentence: IF PO condition PC KO body* KC #sentenceIf;
 else_sentence: ELSE KO body* KC #sentenciaElse;
 

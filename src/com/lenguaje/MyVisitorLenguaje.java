@@ -98,7 +98,15 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     }
     @Override
     public String visitSentenciaElif(LenguajeParser.SentenciaElifContext ctx) {
-        return "el"+visit(ctx.if_sentence());
+        String lineElIf = "el"+visit(ctx.if_sentence());
+        String lineElse="";
+        String lineElif="";
+        if(ctx.else_sentence()!=null){
+            lineElse=visit(ctx.else_sentence());
+        }else if(ctx.elif_sentence()!=null){
+            lineElif=visit(ctx.elif_sentence());
+        }
+        return  lineElIf+ lineElse +lineElif ;
     }
 
     @Override

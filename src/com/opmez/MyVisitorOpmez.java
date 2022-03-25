@@ -108,31 +108,38 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
-        try{
-            boolean result= (boolean) visit(ctx.if_sentence());
-            if(!result){
-                if(ctx.else_sentence()!=null){
-                    visit(ctx.else_sentence());
-                }else if(ctx.elif_sentence()!=null){
-                    visit(ctx.elif_sentence());
+        if(visit(ctx.if_sentence())!=null){
+            try{
+                boolean result= (boolean) visit(ctx.if_sentence());
+                if(!result){
+                    if(ctx.else_sentence()!=null){
+                        visit(ctx.else_sentence());
+                    }else if(ctx.elif_sentence()!=null){
+                        visit(ctx.elif_sentence());
+                    }
                 }
+            }catch (Exception e){
             }
-        }catch (Exception e){
-            ps.println("Error if: "+e);
         }
+
         return null;
     }
 
     @Override
     public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
-        boolean result = (boolean)visit(ctx.condition());
-        if(result){
-            for (int i = 0; i < ctx.body().size(); i++) {
-                visit(ctx.body(i));
+        try{
+            boolean result = (boolean)visit(ctx.condition());
+            if(result){
+                for (int i = 0; i < ctx.body().size(); i++) {
+                    visit(ctx.body(i));
+                }
+                return true;
+            }else{
+                return false;
             }
-            return true;
-        }else{
-            return false;
+        }catch (Exception e){
+            ps.println("Error if: "+e);
+            return null;
         }
     }
 
@@ -186,18 +193,23 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitCondicionesIgualdadExpr(OpmezParser.CondicionesIgualdadExprContext ctx) {
-        if(visit(ctx.expr(0)).getClass().equals(Integer.class) && visit(ctx.expr(1)).getClass().equals(Integer.class)){
-            int left = (int) visit(ctx.expr(0));
-            int right = (int) visit(ctx.expr(1));
-            return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
-        }else if(visit(ctx.expr(0)).getClass().equals(Double.class) || visit(ctx.expr(1)).getClass().equals(Double.class)){
-            double left =  Double.parseDouble(visit(ctx.expr(0)).toString());
-            double right = Double.parseDouble(visit(ctx.expr(1)).toString());
-            return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
+        if(visit(ctx.expr(0))!=null || visit(ctx.expr(1))!=null){
+            if(visit(ctx.expr(0)).getClass().equals(Integer.class) && visit(ctx.expr(1)).getClass().equals(Integer.class)){
+                int left = (int) visit(ctx.expr(0));
+                int right = (int) visit(ctx.expr(1));
+                return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
+            }else if(visit(ctx.expr(0)).getClass().equals(Double.class) || visit(ctx.expr(1)).getClass().equals(Double.class)){
+                double left =  Double.parseDouble(visit(ctx.expr(0)).toString());
+                double right = Double.parseDouble(visit(ctx.expr(1)).toString());
+                return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
+            }else{
+                boolean left = (boolean) visit(ctx.expr(0));
+                boolean right = (boolean) visit(ctx.expr(1));
+                return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
+            }
         }else{
-            boolean left = (boolean) visit(ctx.expr(0));
-            boolean right = (boolean) visit(ctx.expr(1));
-            return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
+            System.out.println("Error");
+            return null;
         }
 
 
