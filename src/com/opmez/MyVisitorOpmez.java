@@ -15,18 +15,6 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         System.setErr(this.ps);
     }
 
-    @Override
-    public Object visitCuerpo(OpmezParser.CuerpoContext ctx) {
-        try{
-            for (int i = 0; i < ctx.body().size(); i++) {
-                Object current = visit(ctx.body(i));
-
-            }
-        }catch (Exception e){
-            ps.println(e);
-        }
-        return null;
-    }
 
     @Override
     public Object visitAsigDeclar(OpmezParser.AsigDeclarContext ctx) {
@@ -142,9 +130,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         try{
             boolean result = (boolean)visit(ctx.condition());
             if(result){
-                for (int i = 0; i < ctx.body().size(); i++) {
-                    visit(ctx.body(i));
-                }
+                visit(ctx.body());
             }
             return  result;
         }catch(Exception e){
@@ -155,9 +141,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitSentenciaElse(OpmezParser.SentenciaElseContext ctx) {
-        for (int i = 0; i < ctx.body().size(); i++) {
-            visit(ctx.body(i));
-        }
+        visit(ctx.body());
         return null;
 
     }
@@ -182,9 +166,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         try{
             boolean result = (boolean)visit(ctx.condition());
             if(result){
-                for (int i = 0; i < ctx.body().size(); i++) {
-                    visit(ctx.body(i));
-                }
+                visit(ctx.body());
             }
             return  result;
         }catch(Exception e){

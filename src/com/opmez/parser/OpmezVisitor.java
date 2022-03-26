@@ -19,35 +19,35 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	T visitCuerpo(OpmezParser.CuerpoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code impresion}
-	 * labeled alternative in {@link OpmezParser#body}.
+	 * labeled alternative in {@link OpmezParser#instructions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitImpresion(OpmezParser.ImpresionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ifElse}
-	 * labeled alternative in {@link OpmezParser#body}.
+	 * labeled alternative in {@link OpmezParser#instructions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIfElse(OpmezParser.IfElseContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code declaracion}
-	 * labeled alternative in {@link OpmezParser#body}.
+	 * labeled alternative in {@link OpmezParser#instructions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDeclaracion(OpmezParser.DeclaracionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code asignacion}
-	 * labeled alternative in {@link OpmezParser#body}.
+	 * labeled alternative in {@link OpmezParser#instructions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAsignacion(OpmezParser.AsignacionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code asigDeclar}
-	 * labeled alternative in {@link OpmezParser#body}.
+	 * labeled alternative in {@link OpmezParser#instructions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -80,6 +80,12 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSentenciaElse(OpmezParser.SentenciaElseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link OpmezParser#body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBody(OpmezParser.BodyContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code expresion}
 	 * labeled alternative in {@link OpmezParser#condition}.
