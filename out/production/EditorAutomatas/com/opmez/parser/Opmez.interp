@@ -74,12 +74,12 @@ WS
 
 rule names:
 program
-body
+instructions
 elif_sentence
 elif_frag_condition
 if_sentence
 else_sentence
-mult_body
+body
 condition
 expr
 
