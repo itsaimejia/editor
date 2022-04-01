@@ -8,6 +8,11 @@ import java.util.HashMap;
 
 public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public static HashMap<String, Object> memory = new HashMap<String, Object>();
+    public static HashMap<String, Object> tempMemory = new HashMap<>();
+    boolean joinIfElse = false;
+    int fails = 0;
+
+
     private PrintStream ps;
     public MyVisitorOpmez(PrintStream ps){
         this.ps=ps;
@@ -15,32 +20,71 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         System.setErr(this.ps);
     }
 
-
     @Override
     public Object visitAsigDeclar(OpmezParser.AsigDeclarContext ctx) {
         String id = ctx.ID().getText();
-        Object value = visit(ctx.expr());
-        memory.put(id,value);
-        return value;
+        if(isGlobal(id)) {
+            System.out.println(ctx.ID().getText()+" ya esta definida");
+            fails++;
+            return  null;
+        }else if(joinIfElse){
+            Object value = visit(ctx.expr());
+            if(!tempMemory.containsKey(id)){
+                tempMemory.put(id,value);
+                return tempMemory.get(id);
+            }else{
+                System.out.println(ctx.ID().getText()+" ya esta definida");
+                fails++;
+                return null;
+            }
+        }else{
+            Object value = visit(ctx.expr());
+            memory.put(id,value);
+            return memory.get(id);
+        }
     }
 
     @Override
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
-        memory.put(id,null);
-        return true;
+        if(joinIfElse){
+            if(isGlobal(id)) {
+                System.out.println(ctx.ID().getText()+" ya esta definida");
+                fails++;
+            }else{
+                tempMemory.put(id,null);
+            }
+        }else if(!isGlobal(id)){
+            memory.put(id,null);
+        }else{
+            System.out.println(ctx.ID().getText()+" ya esta definida");
+            fails++;
+        }
+        return null;
     }
 
     @Override
     public Object visitAsignacion(OpmezParser.AsignacionContext ctx) {
-        String id = ctx.ID().getText();
         try{
-            if(memory.containsKey(id)){
+            String id = ctx.ID().getText();
+            if(joinIfElse && (memory.containsKey(id) || tempMemory.containsKey(id))){
+                if(!isGlobal(id)){
+                    Object value = visit(ctx.expr());
+                    tempMemory.put(id, value);
+                    return tempMemory.get(id);
+                }else{
+                    Object value = visit(ctx.expr());
+                    memory.put(id,value);
+                    return memory.get(id);
+                }
+            }else if(isGlobal(id)) {
                 Object value = visit(ctx.expr());
-                memory.put(id,value);
-                return value;
+                memory.put(id, value);
+                return memory.get(id);
             }else{
-                throw new RuntimeException(id + " no esta declarada");
+                fails++;
+                System.out.println(ctx.ID().getText()+" no esta definida");
+                return null;
             }
         }catch (Exception e){
             return null;
@@ -50,9 +94,11 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
-        Object result = visit(ctx.expr());
-        ps.println(result);
-        return 1;
+        if(fails==0){
+            Object result = visit(ctx.expr());
+            System.out.println(result);
+        }
+        return null;
     }
 
     @Override
@@ -69,13 +115,21 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitId(OpmezParser.IdContext ctx) {
         try{
             String id = ctx.ID().getText();
-            if(memory.containsKey(id)){
+            if(joinIfElse){
+                if(!isGlobal(id)){
+                    return tempMemory.get(id);
+                }else{
+                    return memory.get(id);
+                }
+            }else if(memory.containsKey(id)) {
                 return memory.get(id);
             }else{
-                throw new RuntimeException(ctx.ID().getText()+" no esta definida");
+                fails++;
+                System.out.println(ctx.ID().getText()+" no esta definida");
+                return null;
             }
         }catch (Exception e){
-            ps.println(e);
+            System.out.println(e);
             return null;
         }
     }
@@ -111,6 +165,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
+
         try{
             boolean result= (boolean) visit(ctx.if_sentence());
             if(!result){
@@ -127,26 +182,33 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
+        joinIfElse = true;
         try{
             boolean result = (boolean)visit(ctx.condition());
             if(result){
                 visit(ctx.body());
             }
+            joinIfElse = false;
             return  result;
         }catch(Exception e){
-            ps.println("Algo fallo en: if("+ctx.condition().getText()+")");
+            fails++;
+            System.out.println("Algo fallo en: if("+ctx.condition().getText()+")");
             return null;
         }
+
     }
 
     @Override
     public Object visitSentenciaElse(OpmezParser.SentenciaElseContext ctx) {
+        joinIfElse = true;
         visit(ctx.body());
+        joinIfElse = false;
         return null;
 
     }
     @Override
     public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
+
         try{
             boolean result= (boolean) visit(ctx.elif_frag_condition());
             if(!result){
@@ -164,13 +226,16 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitCondicionElif(OpmezParser.CondicionElifContext ctx) {
         try{
+            joinIfElse = true;
             boolean result = (boolean)visit(ctx.condition());
             if(result){
                 visit(ctx.body());
             }
+            joinIfElse = false;
             return  result;
         }catch(Exception e){
-            ps.println("Algo fallo en: elif("+ctx.condition().getText()+")");
+            fails++;
+            System.out.println("Algo fallo en: elif("+ctx.condition().getText()+")");
             return null;
 
         }
@@ -275,4 +340,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         }
     }
 
+    public boolean isGlobal(String id){
+        return memory.containsKey(id);
+    }
 }

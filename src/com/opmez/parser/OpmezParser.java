@@ -734,6 +734,15 @@ public class OpmezParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class FalsoContext extends ConditionContext {
+		public TerminalNode FALSE() { return getToken(OpmezParser.FALSE, 0); }
+		public FalsoContext(ConditionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof OpmezVisitor ) return ((OpmezVisitor<? extends T>)visitor).visitFalso(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class CondicionesIgualdadContext extends ConditionContext {
 		public Token op;
 		public List<ConditionContext> condition() {
@@ -815,6 +824,15 @@ public class OpmezParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class VerdaderoContext extends ConditionContext {
+		public TerminalNode TRUE() { return getToken(OpmezParser.TRUE, 0); }
+		public VerdaderoContext(ConditionContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof OpmezVisitor ) return ((OpmezVisitor<? extends T>)visitor).visitVerdadero(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 
 	public final ConditionContext condition() throws RecognitionException {
 		return condition(0);
@@ -832,7 +850,7 @@ public class OpmezParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105);
+			setState(107);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
@@ -844,7 +862,7 @@ public class OpmezParser extends Parser {
 				setState(86);
 				match(NOT);
 				setState(87);
-				condition(9);
+				condition(11);
 				}
 				break;
 			case 2:
@@ -928,16 +946,34 @@ public class OpmezParser extends Parser {
 				break;
 			case 6:
 				{
-				_localctx = new ExpresionContext(_localctx);
+				_localctx = new VerdaderoContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(104);
+				match(TRUE);
+				}
+				break;
+			case 7:
+				{
+				_localctx = new FalsoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(105);
+				match(FALSE);
+				}
+				break;
+			case 8:
+				{
+				_localctx = new ExpresionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(106);
 				expr(0);
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(118);
+			setState(120);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -945,16 +981,16 @@ public class OpmezParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(116);
+					setState(118);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 					case 1:
 						{
 						_localctx = new CondicionesIgualdadContext(new ConditionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_condition);
-						setState(107);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(108);
+						setState(109);
+						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
+						setState(110);
 						((CondicionesIgualdadContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==EQT || _la==NEQT) ) {
@@ -965,38 +1001,38 @@ public class OpmezParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(109);
-						condition(8);
+						setState(111);
+						condition(10);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new CondicionYContext(new ConditionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_condition);
-						setState(110);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(111);
-						match(AND);
 						setState(112);
-						condition(5);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						setState(113);
+						match(AND);
+						setState(114);
+						condition(7);
 						}
 						break;
 					case 3:
 						{
 						_localctx = new CondicionOContext(new ConditionContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_condition);
-						setState(113);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(114);
-						match(OR);
 						setState(115);
-						condition(4);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						setState(116);
+						match(OR);
+						setState(117);
+						condition(6);
 						}
 						break;
 					}
 					} 
 				}
-				setState(120);
+				setState(122);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			}
@@ -1083,15 +1119,6 @@ public class OpmezParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class FalsoContext extends ExprContext {
-		public TerminalNode FALSE() { return getToken(OpmezParser.FALSE, 0); }
-		public FalsoContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof OpmezVisitor ) return ((OpmezVisitor<? extends T>)visitor).visitFalso(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class IdContext extends ExprContext {
 		public TerminalNode ID() { return getToken(OpmezParser.ID, 0); }
 		public TerminalNode SUB() { return getToken(OpmezParser.SUB, 0); }
@@ -1099,15 +1126,6 @@ public class OpmezParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof OpmezVisitor ) return ((OpmezVisitor<? extends T>)visitor).visitId(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class VerdaderoContext extends ExprContext {
-		public TerminalNode TRUE() { return getToken(OpmezParser.TRUE, 0); }
-		public VerdaderoContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof OpmezVisitor ) return ((OpmezVisitor<? extends T>)visitor).visitVerdadero(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1137,17 +1155,17 @@ public class OpmezParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(123);
+				setState(125);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==SUB) {
 					{
-					setState(122);
+					setState(124);
 					match(SUB);
 					}
 				}
 
-				setState(125);
+				setState(127);
 				((NumeroContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==INT || _la==DOUBLE) ) {
@@ -1165,39 +1183,21 @@ public class OpmezParser extends Parser {
 				_localctx = new IdContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(127);
+				setState(129);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==SUB) {
 					{
-					setState(126);
+					setState(128);
 					match(SUB);
 					}
 				}
 
-				setState(129);
+				setState(131);
 				match(ID);
 				}
 				break;
 			case 3:
-				{
-				_localctx = new VerdaderoContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(130);
-				match(TRUE);
-				}
-				break;
-			case 4:
-				{
-				_localctx = new FalsoContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(131);
-				match(FALSE);
-				}
-				break;
-			case 5:
 				{
 				_localctx = new ParentesisContext(_localctx);
 				_ctx = _localctx;
@@ -1228,7 +1228,7 @@ public class OpmezParser extends Parser {
 						_localctx = new MultDivContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(138);
-						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(139);
 						((MultDivContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1241,7 +1241,7 @@ public class OpmezParser extends Parser {
 							consume();
 						}
 						setState(140);
-						expr(8);
+						expr(6);
 						}
 						break;
 					case 2:
@@ -1249,7 +1249,7 @@ public class OpmezParser extends Parser {
 						_localctx = new SumSubContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(141);
-						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(142);
 						((SumSubContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -1262,7 +1262,7 @@ public class OpmezParser extends Parser {
 							consume();
 						}
 						setState(143);
-						expr(7);
+						expr(5);
 						}
 						break;
 					}
@@ -1297,20 +1297,20 @@ public class OpmezParser extends Parser {
 	private boolean condition_sempred(ConditionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
-			return precpred(_ctx, 7);
+			return precpred(_ctx, 9);
 		case 1:
-			return precpred(_ctx, 4);
+			return precpred(_ctx, 6);
 		case 2:
-			return precpred(_ctx, 3);
+			return precpred(_ctx, 5);
 		}
 		return true;
 	}
 	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 3:
-			return precpred(_ctx, 7);
+			return precpred(_ctx, 5);
 		case 4:
-			return precpred(_ctx, 6);
+			return precpred(_ctx, 4);
 		}
 		return true;
 	}
@@ -1323,41 +1323,41 @@ public class OpmezParser extends Parser {
 		"\4\3\4\3\4\5\4;\n\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3"+
 		"\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\b\7\bS\n\b\f\b\16\bV\13\b\3\t\3\t"+
 		"\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3"+
-		"\t\5\tl\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\7\tw\n\t\f\t\16\tz\13"+
-		"\t\3\n\3\n\5\n~\n\n\3\n\3\n\5\n\u0082\n\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n"+
-		"\5\n\u008b\n\n\3\n\3\n\3\n\3\n\3\n\3\n\7\n\u0093\n\n\f\n\16\n\u0096\13"+
-		"\n\3\n\2\4\20\22\13\2\4\6\b\n\f\16\20\22\2\b\3\2\20\21\3\2\22\23\3\2\24"+
-		"\25\3\2\37 \3\2\33\34\3\2\35\36\2\u00a7\2\24\3\2\2\2\4\65\3\2\2\2\6\67"+
-		"\3\2\2\2\b<\3\2\2\2\nD\3\2\2\2\fL\3\2\2\2\16T\3\2\2\2\20k\3\2\2\2\22\u008a"+
-		"\3\2\2\2\24\25\7\3\2\2\25\26\7\4\2\2\26\27\7\7\2\2\27\30\7\b\2\2\30\31"+
-		"\7\5\2\2\31\32\5\16\b\2\32\33\7\6\2\2\33\3\3\2\2\2\34\35\7\16\2\2\35\36"+
-		"\7\7\2\2\36\37\5\22\n\2\37 \7\b\2\2 !\7\f\2\2!\66\3\2\2\2\"%\5\n\6\2#"+
-		"&\5\6\4\2$&\5\f\7\2%#\3\2\2\2%$\3\2\2\2%&\3\2\2\2&\66\3\2\2\2\'(\7\17"+
-		"\2\2()\7!\2\2)\66\7\f\2\2*+\7!\2\2+,\7\r\2\2,-\5\22\n\2-.\7\f\2\2.\66"+
-		"\3\2\2\2/\60\7\17\2\2\60\61\7!\2\2\61\62\7\r\2\2\62\63\5\22\n\2\63\64"+
-		"\7\f\2\2\64\66\3\2\2\2\65\34\3\2\2\2\65\"\3\2\2\2\65\'\3\2\2\2\65*\3\2"+
-		"\2\2\65/\3\2\2\2\66\5\3\2\2\2\67:\5\b\5\28;\5\6\4\29;\5\f\7\2:8\3\2\2"+
-		"\2:9\3\2\2\2:;\3\2\2\2;\7\3\2\2\2<=\7\13\2\2=>\7\7\2\2>?\5\20\t\2?@\7"+
-		"\b\2\2@A\7\5\2\2AB\5\16\b\2BC\7\6\2\2C\t\3\2\2\2DE\7\t\2\2EF\7\7\2\2F"+
-		"G\5\20\t\2GH\7\b\2\2HI\7\5\2\2IJ\5\16\b\2JK\7\6\2\2K\13\3\2\2\2LM\7\n"+
-		"\2\2MN\7\5\2\2NO\5\16\b\2OP\7\6\2\2P\r\3\2\2\2QS\5\4\3\2RQ\3\2\2\2SV\3"+
-		"\2\2\2TR\3\2\2\2TU\3\2\2\2U\17\3\2\2\2VT\3\2\2\2WX\b\t\1\2XY\7\32\2\2"+
-		"Yl\5\20\t\13Z[\5\22\n\2[\\\t\2\2\2\\]\5\22\n\2]l\3\2\2\2^_\5\22\n\2_`"+
-		"\t\3\2\2`a\5\22\n\2al\3\2\2\2bc\5\22\n\2cd\t\4\2\2de\5\22\n\2el\3\2\2"+
-		"\2fg\7\7\2\2gh\5\20\t\2hi\7\b\2\2il\3\2\2\2jl\5\22\n\2kW\3\2\2\2kZ\3\2"+
-		"\2\2k^\3\2\2\2kb\3\2\2\2kf\3\2\2\2kj\3\2\2\2lx\3\2\2\2mn\f\t\2\2no\t\2"+
-		"\2\2ow\5\20\t\npq\f\6\2\2qr\7\26\2\2rw\5\20\t\7st\f\5\2\2tu\7\27\2\2u"+
-		"w\5\20\t\6vm\3\2\2\2vp\3\2\2\2vs\3\2\2\2wz\3\2\2\2xv\3\2\2\2xy\3\2\2\2"+
-		"y\21\3\2\2\2zx\3\2\2\2{}\b\n\1\2|~\7\36\2\2}|\3\2\2\2}~\3\2\2\2~\177\3"+
-		"\2\2\2\177\u008b\t\5\2\2\u0080\u0082\7\36\2\2\u0081\u0080\3\2\2\2\u0081"+
-		"\u0082\3\2\2\2\u0082\u0083\3\2\2\2\u0083\u008b\7!\2\2\u0084\u008b\7\30"+
-		"\2\2\u0085\u008b\7\31\2\2\u0086\u0087\7\7\2\2\u0087\u0088\5\22\n\2\u0088"+
-		"\u0089\7\b\2\2\u0089\u008b\3\2\2\2\u008a{\3\2\2\2\u008a\u0081\3\2\2\2"+
-		"\u008a\u0084\3\2\2\2\u008a\u0085\3\2\2\2\u008a\u0086\3\2\2\2\u008b\u0094"+
-		"\3\2\2\2\u008c\u008d\f\t\2\2\u008d\u008e\t\6\2\2\u008e\u0093\5\22\n\n"+
-		"\u008f\u0090\f\b\2\2\u0090\u0091\t\7\2\2\u0091\u0093\5\22\n\t\u0092\u008c"+
-		"\3\2\2\2\u0092\u008f\3\2\2\2\u0093\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0094"+
-		"\u0095\3\2\2\2\u0095\23\3\2\2\2\u0096\u0094\3\2\2\2\16%\65:Tkvx}\u0081"+
+		"\t\3\t\3\t\5\tn\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\7\ty\n\t\f\t\16"+
+		"\t|\13\t\3\n\3\n\5\n\u0080\n\n\3\n\3\n\5\n\u0084\n\n\3\n\3\n\3\n\3\n\3"+
+		"\n\5\n\u008b\n\n\3\n\3\n\3\n\3\n\3\n\3\n\7\n\u0093\n\n\f\n\16\n\u0096"+
+		"\13\n\3\n\2\4\20\22\13\2\4\6\b\n\f\16\20\22\2\b\3\2\20\21\3\2\22\23\3"+
+		"\2\24\25\3\2\37 \3\2\33\34\3\2\35\36\2\u00a7\2\24\3\2\2\2\4\65\3\2\2\2"+
+		"\6\67\3\2\2\2\b<\3\2\2\2\nD\3\2\2\2\fL\3\2\2\2\16T\3\2\2\2\20m\3\2\2\2"+
+		"\22\u008a\3\2\2\2\24\25\7\3\2\2\25\26\7\4\2\2\26\27\7\7\2\2\27\30\7\b"+
+		"\2\2\30\31\7\5\2\2\31\32\5\16\b\2\32\33\7\6\2\2\33\3\3\2\2\2\34\35\7\16"+
+		"\2\2\35\36\7\7\2\2\36\37\5\22\n\2\37 \7\b\2\2 !\7\f\2\2!\66\3\2\2\2\""+
+		"%\5\n\6\2#&\5\6\4\2$&\5\f\7\2%#\3\2\2\2%$\3\2\2\2%&\3\2\2\2&\66\3\2\2"+
+		"\2\'(\7\17\2\2()\7!\2\2)\66\7\f\2\2*+\7!\2\2+,\7\r\2\2,-\5\22\n\2-.\7"+
+		"\f\2\2.\66\3\2\2\2/\60\7\17\2\2\60\61\7!\2\2\61\62\7\r\2\2\62\63\5\22"+
+		"\n\2\63\64\7\f\2\2\64\66\3\2\2\2\65\34\3\2\2\2\65\"\3\2\2\2\65\'\3\2\2"+
+		"\2\65*\3\2\2\2\65/\3\2\2\2\66\5\3\2\2\2\67:\5\b\5\28;\5\6\4\29;\5\f\7"+
+		"\2:8\3\2\2\2:9\3\2\2\2:;\3\2\2\2;\7\3\2\2\2<=\7\13\2\2=>\7\7\2\2>?\5\20"+
+		"\t\2?@\7\b\2\2@A\7\5\2\2AB\5\16\b\2BC\7\6\2\2C\t\3\2\2\2DE\7\t\2\2EF\7"+
+		"\7\2\2FG\5\20\t\2GH\7\b\2\2HI\7\5\2\2IJ\5\16\b\2JK\7\6\2\2K\13\3\2\2\2"+
+		"LM\7\n\2\2MN\7\5\2\2NO\5\16\b\2OP\7\6\2\2P\r\3\2\2\2QS\5\4\3\2RQ\3\2\2"+
+		"\2SV\3\2\2\2TR\3\2\2\2TU\3\2\2\2U\17\3\2\2\2VT\3\2\2\2WX\b\t\1\2XY\7\32"+
+		"\2\2Yn\5\20\t\rZ[\5\22\n\2[\\\t\2\2\2\\]\5\22\n\2]n\3\2\2\2^_\5\22\n\2"+
+		"_`\t\3\2\2`a\5\22\n\2an\3\2\2\2bc\5\22\n\2cd\t\4\2\2de\5\22\n\2en\3\2"+
+		"\2\2fg\7\7\2\2gh\5\20\t\2hi\7\b\2\2in\3\2\2\2jn\7\30\2\2kn\7\31\2\2ln"+
+		"\5\22\n\2mW\3\2\2\2mZ\3\2\2\2m^\3\2\2\2mb\3\2\2\2mf\3\2\2\2mj\3\2\2\2"+
+		"mk\3\2\2\2ml\3\2\2\2nz\3\2\2\2op\f\13\2\2pq\t\2\2\2qy\5\20\t\frs\f\b\2"+
+		"\2st\7\26\2\2ty\5\20\t\tuv\f\7\2\2vw\7\27\2\2wy\5\20\t\bxo\3\2\2\2xr\3"+
+		"\2\2\2xu\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\21\3\2\2\2|z\3\2\2\2}"+
+		"\177\b\n\1\2~\u0080\7\36\2\2\177~\3\2\2\2\177\u0080\3\2\2\2\u0080\u0081"+
+		"\3\2\2\2\u0081\u008b\t\5\2\2\u0082\u0084\7\36\2\2\u0083\u0082\3\2\2\2"+
+		"\u0083\u0084\3\2\2\2\u0084\u0085\3\2\2\2\u0085\u008b\7!\2\2\u0086\u0087"+
+		"\7\7\2\2\u0087\u0088\5\22\n\2\u0088\u0089\7\b\2\2\u0089\u008b\3\2\2\2"+
+		"\u008a}\3\2\2\2\u008a\u0083\3\2\2\2\u008a\u0086\3\2\2\2\u008b\u0094\3"+
+		"\2\2\2\u008c\u008d\f\7\2\2\u008d\u008e\t\6\2\2\u008e\u0093\5\22\n\b\u008f"+
+		"\u0090\f\6\2\2\u0090\u0091\t\7\2\2\u0091\u0093\5\22\n\7\u0092\u008c\3"+
+		"\2\2\2\u0092\u008f\3\2\2\2\u0093\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0094"+
+		"\u0095\3\2\2\2\u0095\23\3\2\2\2\u0096\u0094\3\2\2\2\16%\65:Tmxz\177\u0083"+
 		"\u008a\u0092\u0094";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());

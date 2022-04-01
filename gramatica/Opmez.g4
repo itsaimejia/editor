@@ -38,6 +38,10 @@ condition:
     |
     PO condition PC #condicionParentesis
     |
+    TRUE #verdadero
+    |
+    FALSE #falso
+    |
     expr #expresion
     ;
 
@@ -52,10 +56,6 @@ expr:
     SUB? op=(INT| DOUBLE) #numero
     |
     SUB? ID #id
-    |
-    TRUE #verdadero
-    |
-    FALSE #falso
     |
     PO expr PC #parentesis
     ;

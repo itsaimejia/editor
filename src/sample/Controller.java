@@ -1,17 +1,20 @@
 package sample;
 
-import com.opmez.MyVisitorOpmez;
+import com.lenguaje.MyVisitorLenguaje;
 import com.lenguaje.parser.LenguajeLexer;
 import com.lenguaje.parser.LenguajeParser;
-import com.lenguaje.MyVisitorLenguaje;
+import com.opmez.MyVisitorOpmez;
 import com.opmez.parser.OpmezLexer;
 import com.opmez.parser.OpmezParser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
