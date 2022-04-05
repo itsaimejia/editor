@@ -3,6 +3,7 @@ package sample;
 import com.lenguaje.MyVisitorLenguaje;
 import com.lenguaje.parser.LenguajeLexer;
 import com.lenguaje.parser.LenguajeParser;
+import com.opmez.CheckOpmez;
 import com.opmez.MyVisitorOpmez;
 import com.opmez.parser.OpmezLexer;
 import com.opmez.parser.OpmezParser;
@@ -102,14 +103,29 @@ public class Controller {
     public void inputOpmez(String file_in) throws IOException {
         PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         try {
-            CharStream input = CharStreams.fromFileName(file_in);
-            OpmezLexer lexico = new OpmezLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(lexico);
-            OpmezParser sintactico = new OpmezParser(tokens);
-            ParseTree arbol = sintactico.program();
-            MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
-            visitas.visit(arbol);
-            MyVisitorOpmez.memory.clear();
+            CharStream input_ = CharStreams.fromFileName(file_in);
+            OpmezLexer lexico_ = new OpmezLexer(input_);
+            CommonTokenStream tokens_ = new CommonTokenStream(lexico_);
+            OpmezParser sintactico_ = new OpmezParser(tokens_);
+            ParseTree arbol_ = sintactico_.program();
+            CheckOpmez visitas_ = new CheckOpmez(ps);
+            visitas_.visit(arbol_);
+            CheckOpmez.memory.clear();
+            CheckOpmez.tempMemory.clear();
+            if(visitas_.errors == 0){
+                CharStream input = CharStreams.fromFileName(file_in);
+                OpmezLexer lexico = new OpmezLexer(input);
+                CommonTokenStream tokens = new CommonTokenStream(lexico);
+                OpmezParser sintactico = new OpmezParser(tokens);
+                ParseTree arbol = sintactico.program();
+                MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
+                visitas.visit(arbol);
+                MyVisitorOpmez.memory.clear();
+                MyVisitorOpmez.tempMemory.clear();
+            }else{
+                ps.println("No se pudo compilar");
+            }
+
         } catch (ArithmeticException e) {
             ps.println(e);
             ps.println("No se puede dividir entre 0");
