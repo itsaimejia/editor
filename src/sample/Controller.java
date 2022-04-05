@@ -44,7 +44,6 @@ public class Controller {
     static String last_text;
 
 
-
     public Controller() {
 
         fileChooser.getExtensionFilters().addAll(
@@ -54,23 +53,33 @@ public class Controller {
                 new ExtensionFilter("all files","*.*")
         );
         alert.setTitle("Error");
+
     }
 
 
     public boolean validTranstale(String file_in) throws IOException {
+        PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         CharStream input = CharStreams.fromFileName(file_in);
         LenguajeLexer lexico = new LenguajeLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexico);
         LenguajeParser sintactico = new LenguajeParser(tokens);
         ParseTree arbol = sintactico.program();
         try{
-            MyVisitorLenguaje visitas = new MyVisitorLenguaje();
+            MyVisitorLenguaje visitas = new MyVisitorLenguaje(ps);
             visitas.visit(arbol);
-            traducido=true;
-            return true;
+            if(visitas.errors == 0){
+                System.out.println("traducido");
+                traducido=true;
+                return true;
+
+            }else{
+                System.out.println("no traducido");
+                traducido = false;
+                return false;
+            }
         }catch (Exception e){
-            System.out.println(e);
-            text_Output.appendText("No se puso traducir");
+            traducido = false;
+            ps.println(e);
             return false;
         }
     }
@@ -79,8 +88,8 @@ public class Controller {
         FileWriter fw = new FileWriter(file_in,false);
         fw.write(text_Input.getText());
         fw.close();
-        saveFile();
-        if(validTranstale(file_in)){
+        if(validTranstale(file_in) && traducido){
+            saveFile();
             text_Input.clear();
             for (String line: MyVisitorLenguaje.newSentence) {
                 text_Input.appendText(line + "\n");
@@ -92,6 +101,7 @@ public class Controller {
 
     @FXML
     private void translate() throws  IOException{
+        text_Output.clear();
         if (creado){
             saveFile();
             write();

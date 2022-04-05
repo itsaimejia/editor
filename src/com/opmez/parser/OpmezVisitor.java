@@ -87,12 +87,12 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBody(OpmezParser.BodyContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expresion}
+	 * Visit a parse tree produced by the {@code cero}
 	 * labeled alternative in {@link OpmezParser#condition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpresion(OpmezParser.ExpresionContext ctx);
+	T visitCero(OpmezParser.CeroContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code condicionNegacion}
 	 * labeled alternative in {@link OpmezParser#condition}.
@@ -128,6 +128,13 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCondicionesIgualdad(OpmezParser.CondicionesIgualdadContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code uno}
+	 * labeled alternative in {@link OpmezParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUno(OpmezParser.UnoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code condicionO}
 	 * labeled alternative in {@link OpmezParser#condition}.

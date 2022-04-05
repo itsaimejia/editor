@@ -42,7 +42,9 @@ condition:
     |
     FALSE #falso
     |
-    expr #expresion
+    '1' #uno
+    |
+    '0' #cero
     ;
 
 

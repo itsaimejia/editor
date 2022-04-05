@@ -67,12 +67,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitAsignacion(OpmezParser.AsignacionContext ctx) {
+        String id = ctx.ID().getText();
         if(errorDeclaration){
             errors++;
             return null;
         }else{
             try{
-                String id = ctx.ID().getText();
                 Object value = visit(ctx.expr());
                 if(joinIfElse){
                     if(!memory.containsKey(id)){
@@ -92,6 +92,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     return null;
                 }
             }catch (Exception e){
+                System.out.println("Ocurrio un error en la asignacion de: "+id);
                 return null;
             }
         }
@@ -295,15 +296,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitExpresion(OpmezParser.ExpresionContext ctx) {
-        if ((int)visit(ctx.expr())==0){
-            return false;
-        }else if((int)visit(ctx.expr())==1){
-            return true;
-        }else{
-            return visit(ctx.expr());
-        }
+    public Object visitUno(OpmezParser.UnoContext ctx) {
+        return true;
     }
 
-
+    @Override
+    public Object visitCero(OpmezParser.CeroContext ctx) {
+        return false;
+    }
 }

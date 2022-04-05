@@ -2,12 +2,20 @@ package com.lenguaje;
 
 import com.lenguaje.parser.LenguajeBaseVisitor;
 import com.lenguaje.parser.LenguajeParser;
+
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public static List<String> newSentence = new ArrayList<>();
-
+    public int errors = 0;
+    private PrintStream ps;
+    public MyVisitorLenguaje(PrintStream ps){
+        this.ps=ps;
+        System.setErr(this.ps);
+        System.setOut(this.ps);
+    }
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
         newSentence.add("#initial()->");
@@ -20,91 +28,177 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitDeclaracion(LenguajeParser.DeclaracionContext ctx) {
-        return "use "+ ctx.ID() +';';
+       try{
+           return "use "+ ctx.ID() +';';
+       }catch (Exception e){
+           errors++;
+           System.out.println(e);
+           return null;
+       }
 
     }
 
     @Override
     public String visitAsignacion(LenguajeParser.AsignacionContext ctx) {
-        return ctx.ID().getText() + "="+ visit(ctx.expr())+';';
+        try{
+            return ctx.ID().getText() + "="+ visit(ctx.expr())+';';
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
     }
 
     @Override
     public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
-        return "use " +ctx.ID() + "="+visit(ctx.expr()) +';';
+        try{
+            return "use " +ctx.ID() + "="+visit(ctx.expr()) +';';
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     @Override
     public String visitImpresion(LenguajeParser.ImpresionContext ctx) {
-        return "systalk(" + visit(ctx.expr()) + ");";
+        try{
+            return "systalk(" + visit(ctx.expr()) + ");";
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     @Override
     public String visitParentesis(LenguajeParser.ParentesisContext ctx) {
-        return '(' + visit(ctx.expr()) +')';
+        try{
+            return '(' + visit(ctx.expr()) +')';
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
     }
 
     @Override
     public String visitNum(LenguajeParser.NumContext ctx) {
-        return ctx.getText();
+
+        try{
+            return ((ctx.SUB() != null)? '-' + ctx.NUM().getText() : ctx.NUM().getText()) ;
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
     }
 
     @Override
     public String visitId(LenguajeParser.IdContext ctx) {
-        return ctx.ID().getText();
+        try{
+            return ctx.ID().getText();
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     @Override
     public String visitMultDiv(LenguajeParser.MultDivContext ctx) {
-        return ctx.getText();
+
+        try{
+            return ctx.getText();
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
     }
 
     @Override
     public String visitSumSub(LenguajeParser.SumSubContext ctx) {
-        return ctx.getText();
+
+        try{
+            return ctx.getText();
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
     }
 
     @Override
     public String visitIfElse(LenguajeParser.IfElseContext ctx) {
-        String lineIf = visit(ctx.if_sentence());
-        String lineElse="";
-        String lineElif="";
-        if(ctx.else_sentence()!=null){
-            lineElse=visit(ctx.else_sentence());
-        }else if(ctx.elif_sentence()!=null){
-            lineElif=visit(ctx.elif_sentence());
+        try{
+            String lineIf = visit(ctx.if_sentence());
+            String lineElse="";
+            String lineElif="";
+            if(ctx.else_sentence()!=null){
+                lineElse=visit(ctx.else_sentence());
+            }else if(ctx.elif_sentence()!=null){
+                lineElif=visit(ctx.elif_sentence());
+            }
+            return  lineIf+ lineElse +lineElif ;
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
         }
-        return  lineIf+ lineElse +lineElif ;
     }
 
     @Override
     public String visitSentenceIf(LenguajeParser.SentenceIfContext ctx) {
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<ctx.body().size(); i++){
-            sb.append(visit(ctx.body(i))+"\n");
+        try{
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<ctx.body().size(); i++){
+                sb.append(visit(ctx.body(i))+"\n");
+            }
+            return "if("+visit(ctx.condition())+")->\n"+sb +"<-";
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
         }
-        return "if("+visit(ctx.condition())+")->\n"+sb +"<-";
     }
 
     @Override
     public String visitSentenciaElse(LenguajeParser.SentenciaElseContext ctx) {
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<ctx.body().size(); i++){
-            sb.append(visit(ctx.body(i))+"\n");
+        try{
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<ctx.body().size(); i++){
+                sb.append(visit(ctx.body(i))+"\n");
+            }
+            return "else->\n"+sb+"<-";
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
         }
-        return "else->\n"+sb+"<-";
     }
     @Override
     public String visitSentenciaElif(LenguajeParser.SentenciaElifContext ctx) {
-        String lineElIf = "el"+visit(ctx.if_sentence());
-        String lineElse="";
-        String lineElif="";
-        if(ctx.else_sentence()!=null){
-            lineElse=visit(ctx.else_sentence());
-        }else if(ctx.elif_sentence()!=null){
-            lineElif=visit(ctx.elif_sentence());
+
+
+        try{
+            String lineElIf = "el"+visit(ctx.if_sentence());
+            String lineElse="";
+            String lineElif="";
+            if(ctx.else_sentence()!=null){
+                lineElse=visit(ctx.else_sentence());
+            }else if(ctx.elif_sentence()!=null){
+                lineElif=visit(ctx.elif_sentence());
+            }
+            return  lineElIf+ lineElse +lineElif ;
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
         }
-        return  lineElIf+ lineElse +lineElif ;
     }
 
     @Override

@@ -330,14 +330,13 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitExpresion(OpmezParser.ExpresionContext ctx) {
-        if ((int)visit(ctx.expr())==0){
-            return false;
-        }else if((int)visit(ctx.expr())==1){
-            return true;
-        }else{
-            return visit(ctx.expr());
-        }
+    public Object visitUno(OpmezParser.UnoContext ctx) {
+        return true;
+    }
+
+    @Override
+    public Object visitCero(OpmezParser.CeroContext ctx) {
+        return false;
     }
 
     public boolean isGlobal(String id){
