@@ -24,6 +24,9 @@ void main()
     else
     {
         var = -1;
+        {
+            var = 2;
+        }
     }
 
     printf(var);

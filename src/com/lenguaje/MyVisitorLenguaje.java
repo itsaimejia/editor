@@ -202,14 +202,13 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
         boolean fail = false;
         try{
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<ctx.body().size(); i++){
+            for(int i=0; i<ctx.body().size(); i++) {
                 String current = visit(ctx.body(i));
-                if(current != null)
-                    sb.append(current+"\n");
-                else{
+                if (current == null){
                     fail = true;
                     break;
                 }
+                sb.append(current+"\n");
             }
             if(!fail)
                 return "else->\n"+sb+"<-";

@@ -70,6 +70,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         String id = ctx.ID().getText();
         if(errorDeclaration){
             errors++;
+            System.out.println(ctx.ID().getText()+" no esta declarada");
             return null;
         }else{
             try{
@@ -88,7 +89,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     return memory.get(id);
                 }else{
                     errors++;
-                    System.out.println(ctx.ID().getText()+" no esta definida");
+                    System.out.println(ctx.ID().getText()+" no esta declarada");
                     return null;
                 }
             }catch (Exception e){
@@ -297,10 +298,11 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitExpresion(OpmezParser.ExpresionContext ctx) {
-        if(ctx.expr().getText() == "1" || ctx.expr().getText() == "0"){
-            return ctx.expr().getText() == "1"? true :false;
+        if(ctx.expr().getText() .equals("1") || ctx.expr().getText().equals("0")){
+            return ctx.expr().getText().equals("1")? true :false;
         }else{
             errors++;
+            System.out.println("Error en evaluar: "+ctx.expr().getText()+" se esperaba {1, 0, true, false, condition}");
             return null;
         }
 

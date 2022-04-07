@@ -19,9 +19,8 @@ import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.*;
@@ -42,63 +41,20 @@ public class Controller {
     static Alert alert = new Alert(AlertType.WARNING);
     static String initial_path = System.getProperty("user.home");
     static String last_text;
-    private PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
 
     public Controller() {
         fileChooser.getExtensionFilters().addAll(
+                new ExtensionFilter("c files","*.c"),
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("dat Files","*.dat"),
-                new ExtensionFilter("c files","*.c"),
                 new ExtensionFilter("all files","*.*")
         );
         alert.setTitle("Error");
-        System.setErr(ps);
-        System.setOut(ps);
-    }
 
-
-    public boolean validTranstale(String file_in) throws IOException {
-        CharStream input = CharStreams.fromFileName(file_in);
-        LenguajeLexer lexico = new LenguajeLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexico);
-        LenguajeParser sintactico = new LenguajeParser(tokens);
-        ParseTree arbol = sintactico.program();
-        try{
-            MyVisitorLenguaje visitas = new MyVisitorLenguaje(ps);
-            visitas.visit(arbol);
-            ps.println(visitas);
-            if(visitas.errors == 0){
-                traducido=true;
-                return true;
-            }else{
-                ps.println("Ocurrio un problema al traducir");
-                traducido = false;
-                return false;
-            }
-        }catch (Exception e){
-            traducido = false;
-            ps.println(e);
-            return false;
-        }
     }
-    private void write() throws IOException{
-        String file_in ="C:\\Javalib\\lib\\input.txt";
-        FileWriter fw = new FileWriter(file_in,false);
-        fw.write(text_Input.getText());
-        fw.close();
-        if(validTranstale(file_in) && traducido){
-            saveFile();
-            text_Input.clear();
-            for (String line: MyVisitorLenguaje.newSentence) {
-                text_Input.appendText(line + "\n");
-            }
-            MyVisitorLenguaje.newSentence.clear();
-        }
-    }
-
     @FXML
     private void translate() throws  IOException{
-
+        text_Output.clear();
         if (creado){
             saveFile();
             write();
@@ -107,6 +63,58 @@ public class Controller {
                 write();
         }
     }
+    private void write() throws IOException{
+        String file_in ="C:\\Javalib\\lib\\input.txt";
+        FileWriter fw = new FileWriter(file_in,false);
+        fw.write(text_Input.getText());
+        fw.close();
+        PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
+        System.setErr(ps);
+        System.setOut(ps);
+        try {
+            CharStream input = CharStreams.fromFileName(file_in);
+            LenguajeLexer lexico = new LenguajeLexer(input);
+            lexico.removeErrorListeners();
+            lexico.addErrorListener(new BaseErrorListener(){
+
+                @Override
+                public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
+                        throws ParseCancellationException {
+                    throw new ParseCancellationException("line:" + line + ":" + charPositionInLine + " " + msg);
+                }
+            });
+            CommonTokenStream tokens = new CommonTokenStream(lexico);
+            LenguajeParser sintactico = new LenguajeParser(tokens);
+            sintactico.removeErrorListeners();
+            sintactico.addErrorListener(new BaseErrorListener(){
+                @Override
+                public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
+                        throws ParseCancellationException {
+                    throw new ParseCancellationException("line:" + line + ":" + charPositionInLine + " " + msg);
+                }
+            });
+            ParseTree arbol = sintactico.program();
+            MyVisitorLenguaje visitas = new MyVisitorLenguaje(ps);
+            visitas.visit(arbol);
+
+            if (visitas.errors == 0) {
+                text_Input.clear();
+                for (String line : MyVisitorLenguaje.newSentence) {
+                    text_Input.appendText(line + "\n");
+                }
+                MyVisitorLenguaje.newSentence.clear();
+
+            } else {
+                ps.println("Ocurrio un problema al traducir");
+
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+    }
+
+
     public void inputOpmez(String file_in) throws IOException {
         PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         try {
@@ -119,6 +127,7 @@ public class Controller {
             visitas_.visit(arbol_);
             CheckOpmez.memory.clear();
             CheckOpmez.tempMemory.clear();
+            System.out.println(visitas_.errors);
             if(visitas_.errors == 0){
                 text_Output.clear();
                 CharStream input = CharStreams.fromFileName(file_in);
@@ -133,6 +142,7 @@ public class Controller {
             }else{
                 ps.println("No se pudo compilar");
             }
+            visitas_.errors=0;
 
         } catch (ArithmeticException e) {
             ps.println(e);
@@ -170,7 +180,7 @@ public class Controller {
             String path_name = fileChooser.showOpenDialog(new Stage()).getPath();
             path_actual = path_name;
             String fill_text = "";
-            text_Input.setText("");
+            text_Input.clear();
             if (path_name != null) {
                 BufferedReader br = new BufferedReader(new FileReader(path_name));
                 String strCurrentLine;
