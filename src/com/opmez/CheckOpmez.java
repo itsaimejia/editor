@@ -197,7 +197,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         Object result = null;
         joinIfElse = true;
         try{
-            visit(ctx.condition());
+            boolean condicion = (boolean) visit(ctx.condition());
             result=visit(ctx.body());
         }catch(Exception e){
             errors++;
@@ -296,12 +296,13 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitUno(OpmezParser.UnoContext ctx) {
-        return true;
-    }
+    public Object visitExpresion(OpmezParser.ExpresionContext ctx) {
+        if(ctx.expr().getText() == "1" || ctx.expr().getText() == "0"){
+            return ctx.expr().getText() == "1"? true :false;
+        }else{
+            errors++;
+            return null;
+        }
 
-    @Override
-    public Object visitCero(OpmezParser.CeroContext ctx) {
-        return false;
     }
 }

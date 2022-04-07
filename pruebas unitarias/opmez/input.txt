@@ -1,0 +1,31 @@
+#initial()->
+
+use var;
+
+var=1;
+
+if(false)->
+var=2;
+if(0)->
+systalk(1);
+<-else->
+systalk(0);
+<-
+<-elif(var>=2)->
+systalk(var);
+var=0;
+<-else->
+var=-1;
+<-
+
+systalk(var);
+
+<-
+
+
+Process finished with exit code 0
+
+
+
+
+

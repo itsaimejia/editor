@@ -42,10 +42,9 @@ public class Controller {
     static Alert alert = new Alert(AlertType.WARNING);
     static String initial_path = System.getProperty("user.home");
     static String last_text;
-
+    private PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
 
     public Controller() {
-
         fileChooser.getExtensionFilters().addAll(
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("dat Files","*.dat"),
@@ -53,12 +52,12 @@ public class Controller {
                 new ExtensionFilter("all files","*.*")
         );
         alert.setTitle("Error");
-
+        System.setErr(ps);
+        System.setOut(ps);
     }
 
 
     public boolean validTranstale(String file_in) throws IOException {
-        PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         CharStream input = CharStreams.fromFileName(file_in);
         LenguajeLexer lexico = new LenguajeLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexico);
@@ -67,13 +66,12 @@ public class Controller {
         try{
             MyVisitorLenguaje visitas = new MyVisitorLenguaje(ps);
             visitas.visit(arbol);
+            ps.println(visitas);
             if(visitas.errors == 0){
-                System.out.println("traducido");
                 traducido=true;
                 return true;
-
             }else{
-                System.out.println("no traducido");
+                ps.println("Ocurrio un problema al traducir");
                 traducido = false;
                 return false;
             }
@@ -96,12 +94,11 @@ public class Controller {
             }
             MyVisitorLenguaje.newSentence.clear();
         }
-
     }
 
     @FXML
     private void translate() throws  IOException{
-        text_Output.clear();
+
         if (creado){
             saveFile();
             write();
@@ -123,6 +120,7 @@ public class Controller {
             CheckOpmez.memory.clear();
             CheckOpmez.tempMemory.clear();
             if(visitas_.errors == 0){
+                text_Output.clear();
                 CharStream input = CharStreams.fromFileName(file_in);
                 OpmezLexer lexico = new OpmezLexer(input);
                 CommonTokenStream tokens = new CommonTokenStream(lexico);
