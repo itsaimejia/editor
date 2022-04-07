@@ -48,7 +48,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
         if(joinIfElse){
-            if(isGlobal(id)) {
+            if(isGlobal(id) || isLocal(id)) {
                 System.out.println(ctx.ID().getText()+" ya esta definida");
                 fails++;
             }else{
@@ -342,5 +342,9 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     public boolean isGlobal(String id){
         return memory.containsKey(id);
+    }
+
+    public boolean isLocal(String id){
+        return tempMemory.containsKey(id);
     }
 }
