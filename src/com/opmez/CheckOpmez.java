@@ -12,18 +12,37 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     boolean joinIfElse = false;
     public boolean errorDeclaration = false;
     public int errors = 0;
-
+    private boolean bodyInScope=false;
     private PrintStream ps;
     public CheckOpmez(PrintStream ps){
         this.ps=ps;
         System.setOut(this.ps);
         System.setErr(this.ps);
     }
+
+    @Override
+    public Object visitCuerpo(OpmezParser.CuerpoContext ctx) {
+        for (int i = 0; i < ctx.instructions().size(); i++) {
+            visit(ctx.instructions(i));
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitCuerpoScope(OpmezParser.CuerpoScopeContext ctx) {
+        for (int i = 0; i < ctx.instructions().size(); i++) {
+            visit(ctx.instructions(i));
+            bodyInScope = true;
+        }
+        bodyInScope=false;
+        return null;
+    }
+
     @Override
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
 
-        if(joinIfElse){
+        if(joinIfElse || bodyInScope){
             if(memory.containsKey(id) && tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
@@ -45,7 +64,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitAsigDeclar(OpmezParser.AsigDeclarContext ctx) {
         String id = ctx.ID().getText();
         Object value = visit(ctx.expr());
-        if(joinIfElse){
+        if(joinIfElse || bodyInScope){
             if(memory.containsKey(id) || tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
@@ -77,7 +96,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }else{
             try{
                 Object value = visit(ctx.expr());
-                if(joinIfElse){
+                if(joinIfElse || bodyInScope){
                     if(!memory.containsKey(id)){
                         tempMemory.put(id, value);
                         return tempMemory.get(id);
@@ -105,7 +124,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitId(OpmezParser.IdContext ctx) {
         try{
             String id = ctx.ID().getText();
-            if(joinIfElse){
+            if(joinIfElse || bodyInScope){
                 if(!memory.containsKey(id)){
                     return tempMemory.get(id);
                 }else{
@@ -135,7 +154,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
-
+        joinIfElse = true;
         try{
             visit(ctx.if_sentence());
             if(ctx.else_sentence()!=null){
@@ -147,14 +166,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
         }
 
-        joinIfElse=false;
         return null;
     }
 
     @Override
     public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
         Object result = null;
-        joinIfElse = true;
         try{
             visit(ctx.condition());
             result=visit(ctx.body());
@@ -185,7 +202,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
     @Override
     public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
-
+        joinIfElse = true;
         try{
             visit(ctx.elif_frag_condition());
             if(ctx.else_sentence()!=null){
@@ -196,14 +213,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }catch (Exception e){
 
         }
-        joinIfElse=false;
         return null;
     }
 
     @Override
     public Object visitCondicionElif(OpmezParser.CondicionElifContext ctx) {
         Object result = null;
-        joinIfElse = true;
         try{
             boolean condicion = (boolean) visit(ctx.condition());
             result=visit(ctx.body());

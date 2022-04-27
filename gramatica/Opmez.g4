@@ -1,6 +1,6 @@
 grammar Opmez;
 
-program: DEFINEFUNC INITIAL PO PC KO body KC #cuerpo;
+program: DEFINEFUNC INITIAL PO PC KO instructions* KC #cuerpo;
 
 instructions:
     PRINT PO expr PC SCOL #impresion
@@ -19,7 +19,7 @@ elif_frag_condition: ELIF PO condition PC KO body KC #condicionElif;
 if_sentence: IF PO condition PC KO body KC #sentenciaIf;
 else_sentence: ELSE KO body KC #sentenciaElse;
 
-body: instructions*;
+body: instructions* #cuerpoScope;
 
 condition:
     NOT condition #condicionNegacion

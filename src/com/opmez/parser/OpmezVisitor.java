@@ -81,11 +81,12 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSentenciaElse(OpmezParser.SentenciaElseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link OpmezParser#body}.
+	 * Visit a parse tree produced by the {@code cuerpoScope}
+	 * labeled alternative in {@link OpmezParser#body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBody(OpmezParser.BodyContext ctx);
+	T visitCuerpoScope(OpmezParser.CuerpoScopeContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code expresion}
 	 * labeled alternative in {@link OpmezParser#condition}.
