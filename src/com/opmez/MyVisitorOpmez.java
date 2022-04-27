@@ -51,7 +51,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
             if(isGlobal(id) || isLocal(id)) {
                 System.out.println(ctx.ID().getText()+" ya esta definida");
                 fails++;
-            }else{
+            }else if(!isLocal(id)){
                 tempMemory.put(id,null);
             }
         }else if(!isGlobal(id)){
@@ -188,6 +188,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
             if(result){
                 visit(ctx.body());
             }
+            tempMemory.clear();
             joinIfElse = false;
             return  result;
         }catch(Exception e){
@@ -202,6 +203,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitSentenciaElse(OpmezParser.SentenciaElseContext ctx) {
         joinIfElse = true;
         visit(ctx.body());
+        tempMemory.clear();
         joinIfElse = false;
         return null;
 
@@ -232,6 +234,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
                 visit(ctx.body());
             }
             joinIfElse = false;
+            tempMemory.clear();
             return  result;
         }catch(Exception e){
             fails++;

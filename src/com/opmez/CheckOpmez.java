@@ -22,11 +22,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
+
         if(joinIfElse){
-            if(memory.containsKey(id) || tempMemory.containsKey(id)){
+            if(memory.containsKey(id) && tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
-                System.out.println(ctx.ID().getText()+" ya esta declarada");
+                System.out.println(ctx.ID().getText()+" ya esta declarada DECLARACION LOCAL");
             }else{
                 tempMemory.put(id,null);
             }
@@ -35,7 +36,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }else{
             errorDeclaration =true;
             errors++;
-            System.out.println(ctx.ID().getText()+" ya esta declarada");
+            System.out.println(ctx.ID().getText()+" ya esta declarada DECLARACION GLOBAL");
         }
         return null;
     }
@@ -68,9 +69,10 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitAsignacion(OpmezParser.AsignacionContext ctx) {
         String id = ctx.ID().getText();
+
         if(errorDeclaration){
             errors++;
-            System.out.println(ctx.ID().getText()+" no esta declarada");
+            System.out.println(ctx.ID().getText()+" no esta declarada ASIGNACION");
             return null;
         }else{
             try{
@@ -89,7 +91,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     return memory.get(id);
                 }else{
                     errors++;
-                    System.out.println(ctx.ID().getText()+" no esta declarada");
+                    System.out.println(ctx.ID().getText()+" no esta declarada ASIGNACION");
                     return null;
                 }
             }catch (Exception e){
@@ -113,7 +115,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                 return memory.get(id);
             }else{
                 errors++;
-                System.out.println(ctx.ID().getText()+" no esta definida");
+                System.out.println(ctx.ID().getText()+" no esta definida, ID");
                 return null;
             }
         }catch (Exception e){
@@ -144,6 +146,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }catch (Exception e){
 
         }
+
+        joinIfElse=false;
         return null;
     }
 
@@ -158,7 +162,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             errors++;
             ps.println("Algo fallo en: if("+ctx.condition().getText()+")");
         }
-        joinIfElse = false;
+        tempMemory.clear();
+
         return result;
 
     }
@@ -173,7 +178,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             errors++;
             ps.println("Algo fallo en: else");
         }
-        joinIfElse = false;
+
+        tempMemory.clear();
         return result;
 
     }
@@ -190,6 +196,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }catch (Exception e){
 
         }
+        joinIfElse=false;
         return null;
     }
 
@@ -204,7 +211,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             errors++;
             ps.println("Algo fallo en: else");
         }
-        joinIfElse = false;
+        tempMemory.clear();
         return result;
     }
 

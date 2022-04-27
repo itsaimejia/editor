@@ -127,7 +127,7 @@ public class Controller {
             visitas_.visit(arbol_);
             CheckOpmez.memory.clear();
             CheckOpmez.tempMemory.clear();
-            System.out.println(visitas_.errors);
+
             if(visitas_.errors == 0){
                 text_Output.clear();
                 CharStream input = CharStreams.fromFileName(file_in);
