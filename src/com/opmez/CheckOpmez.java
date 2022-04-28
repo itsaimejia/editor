@@ -9,10 +9,10 @@ import java.util.HashMap;
 public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public static HashMap<String, Object> memory = new HashMap<String, Object>();
     public static HashMap<String, Object> tempMemory = new HashMap<>();
-    boolean joinIfElse = false;
-    public boolean errorDeclaration = false;
-    public int errors = 0;
+    private boolean joinIfElse = false;
     private boolean bodyInScope=false;
+    private boolean errorDeclaration = false;
+    public int errors = 0;
     private PrintStream ps;
     public CheckOpmez(PrintStream ps){
         this.ps=ps;
@@ -46,7 +46,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             if(memory.containsKey(id) && tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
-                System.out.println(ctx.ID().getText()+" ya esta declarada DECLARACION LOCAL");
+                System.out.println(ctx.ID().getText()+" ya esta declarada");
             }else{
                 tempMemory.put(id,null);
             }
@@ -55,7 +55,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }else{
             errorDeclaration =true;
             errors++;
-            System.out.println(ctx.ID().getText()+" ya esta declarada DECLARACION GLOBAL");
+            System.out.println(ctx.ID().getText()+" ya esta declarada");
         }
         return null;
     }
@@ -91,7 +91,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
         if(errorDeclaration){
             errors++;
-            System.out.println(ctx.ID().getText()+" no esta declarada ASIGNACION");
+            System.out.println(ctx.ID().getText()+" no esta declarada");
             return null;
         }else{
             try{
@@ -110,7 +110,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     return memory.get(id);
                 }else{
                     errors++;
-                    System.out.println(ctx.ID().getText()+" no esta declarada ASIGNACION");
+                    System.out.println(ctx.ID().getText()+" no esta declarada");
                     return null;
                 }
             }catch (Exception e){
@@ -152,6 +152,15 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }else
             return null;
     }
+
+    @Override
+    public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
+
+        Object result = visit(ctx.expr());
+        System.out.println(result);
+        return null;
+    }
+
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
         joinIfElse = true;
