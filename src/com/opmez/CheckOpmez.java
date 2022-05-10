@@ -12,8 +12,10 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     private boolean joinIfElse = false;
     private boolean bodyInScope=false;
     private boolean errorDeclaration = false;
+    private boolean globalSentence=false;
     public int errors = 0;
     private PrintStream ps;
+    int line = 1;
     public CheckOpmez(PrintStream ps){
         this.ps=ps;
         System.setOut(this.ps);
@@ -24,15 +26,21 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitCuerpo(OpmezParser.CuerpoContext ctx) {
         for (int i = 0; i < ctx.instructions().size(); i++) {
             visit(ctx.instructions(i));
+            globalSentence=true;
+            line++;
         }
+        globalSentence=false;
         return null;
     }
 
     @Override
     public Object visitCuerpoScope(OpmezParser.CuerpoScopeContext ctx) {
+        line++;
         for (int i = 0; i < ctx.instructions().size(); i++) {
             visit(ctx.instructions(i));
             bodyInScope = true;
+            line++;
+
         }
         bodyInScope=false;
         return null;
@@ -42,11 +50,11 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
 
-        if(joinIfElse || bodyInScope){
+        if(joinIfElse || bodyInScope ){
             if(memory.containsKey(id) && tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
-                System.out.println(ctx.ID().getText()+" ya esta declarada");
+                System.out.println("Linea"+line+":"+ctx.ID().getText()+" ya esta declarada");
             }else{
                 tempMemory.put(id,null);
             }
@@ -55,7 +63,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }else{
             errorDeclaration =true;
             errors++;
-            System.out.println(ctx.ID().getText()+" ya esta declarada");
+            System.out.println("Linea"+line+":"+ctx.ID().getText()+" ya esta declarada");
         }
         return null;
     }
@@ -68,7 +76,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             if(memory.containsKey(id) || tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
-                System.out.println(ctx.ID().getText()+" ya esta declarada");
+                System.out.println("Linea"+line+":"+ctx.ID().getText()+" ya esta declarada");
                 return null;
             }else{
                 tempMemory.put(id,value);
@@ -80,7 +88,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }else{
             errorDeclaration =true;
             errors++;
-            System.out.println(ctx.ID().getText()+" ya esta declarada");
+            System.out.println("Linea"+line+": "+ctx.ID().getText()+" ya esta declarada");
             return null;
         }
     }
@@ -91,30 +99,33 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
         if(errorDeclaration){
             errors++;
-            System.out.println(ctx.ID().getText()+" no esta declarada");
+            System.out.println("Linea"+line+": "+ctx.ID().getText()+" no esta declarada");
             return null;
         }else{
             try{
                 Object value = visit(ctx.expr());
                 if(joinIfElse || bodyInScope){
-                    if(!memory.containsKey(id)){
+                    if(tempMemory.containsKey(id)){
                         tempMemory.put(id, value);
                         return tempMemory.get(id);
-                    }else{
+                    }else if(memory.containsKey(id)){
                         memory.put(id,value);
                         return memory.get(id);
+                    }else{
+                        errors++;
+                        System.out.println("Linea"+line+": "+ctx.ID().getText()+" no esta declarada");
+                        return null;
                     }
                 }else if(memory.containsKey(id)) {
-
                     memory.put(id, value);
                     return memory.get(id);
                 }else{
                     errors++;
-                    System.out.println(ctx.ID().getText()+" no esta declarada");
+                    System.out.println("Linea"+line+": "+ctx.ID().getText()+" no esta declarada");
                     return null;
                 }
             }catch (Exception e){
-                System.out.println("Ocurrio un error en la asignacion de: "+id);
+                System.out.println("Linea"+line+": Ocurrio un error en la asignacion de: "+id);
                 return null;
             }
         }
@@ -122,19 +133,26 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitId(OpmezParser.IdContext ctx) {
+        System.out.println(memory);
+        System.out.println(tempMemory);
         try{
             String id = ctx.ID().getText();
             if(joinIfElse || bodyInScope){
-                if(!memory.containsKey(id)){
+                if(tempMemory.containsKey(id)){
                     return tempMemory.get(id);
-                }else{
+                }else if(memory.containsKey(id)){
                     return memory.get(id);
+                }else{
+                    errors++;
+                    System.out.println("Linea"+line+": "+ctx.ID().getText()+" no esta definida");
+                    System.out.println();
+                    return null;
                 }
             }else if(memory.containsKey(id)) {
                 return memory.get(id);
             }else{
                 errors++;
-                System.out.println(ctx.ID().getText()+" no esta definida, ID");
+                System.out.println("Linea"+line+": "+ctx.ID().getText()+" no esta definida");
                 return null;
             }
         }catch (Exception e){
@@ -153,13 +171,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             return null;
     }
 
-    @Override
-    public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
 
-        Object result = visit(ctx.expr());
-        System.out.println(result);
-        return null;
-    }
 
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
@@ -189,7 +201,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             ps.println("Algo fallo en: if("+ctx.condition().getText()+")");
         }
         tempMemory.clear();
-
+        joinIfElse=false;
+        bodyInScope=false;
         return result;
 
     }
@@ -204,7 +217,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             errors++;
             ps.println("Algo fallo en: else");
         }
-
+        joinIfElse=false;
+        bodyInScope=false;
         tempMemory.clear();
         return result;
 
@@ -236,6 +250,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             ps.println("Algo fallo en: else");
         }
         tempMemory.clear();
+        joinIfElse=false;
+        bodyInScope=false;
         return result;
     }
 

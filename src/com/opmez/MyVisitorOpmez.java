@@ -171,6 +171,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
                     visit(ctx.elif_sentence());
                 }
             }
+
         }catch (Exception e){
         }
         return null;
@@ -185,7 +186,8 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
                 visit(ctx.body());
             }
             tempMemory.clear();
-            joinIfElse = false;
+            joinIfElse=false;
+            bodyInScope=false;
             return  result;
         }catch(Exception e){
             System.out.println("Algo fallo en: if("+ctx.condition().getText()+")");
@@ -199,7 +201,8 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         joinIfElse = true;
         visit(ctx.body());
         tempMemory.clear();
-        joinIfElse = false;
+        joinIfElse=false;
+        bodyInScope=false;
         return null;
 
     }
@@ -215,6 +218,8 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
                     visit(ctx.elif_sentence());
                 }
             }
+            joinIfElse=false;
+            bodyInScope=false;
         }catch (Exception e){
         }
         return null;

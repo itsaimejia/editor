@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.*;
+import java.util.List;
 import java.util.Optional;
 
 public class Controller {
@@ -54,6 +55,7 @@ public class Controller {
     }
     @FXML
     private void translate() throws  IOException{
+
         text_Output.clear();
         if (creado){
             saveFile();
@@ -63,11 +65,21 @@ public class Controller {
                 write();
         }
     }
+
+    private void createFileJasmin(List<String> compilador) throws IOException{
+        String file_in ="C:\\Users\\itsai\\Desktop\\jasmin\\code.j";
+        FileWriter fw = new FileWriter(file_in,false);
+        for (String line: compilador) {
+            fw.write(line+"\n");
+        }
+        fw.close();
+    }
     private void write() throws IOException{
         String file_in ="C:\\Javalib\\lib\\input.txt";
         FileWriter fw = new FileWriter(file_in,false);
         fw.write(text_Input.getText());
         fw.close();
+
         PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         System.setErr(ps);
         System.setOut(ps);
@@ -96,7 +108,7 @@ public class Controller {
             ParseTree arbol = sintactico.program();
             MyVisitorLenguaje visitas = new MyVisitorLenguaje(ps);
             visitas.visit(arbol);
-
+            createFileJasmin(MyVisitorLenguaje.compilador);
             if (visitas.errors == 0) {
                 text_Input.clear();
                 for (String line : MyVisitorLenguaje.newSentence) {
@@ -125,6 +137,8 @@ public class Controller {
             ParseTree arbol_ = sintactico_.program();
             CheckOpmez visitas_ = new CheckOpmez(ps);
             visitas_.visit(arbol_);
+            System.out.println(CheckOpmez.memory);
+            System.out.println(CheckOpmez.tempMemory);
             CheckOpmez.memory.clear();
             CheckOpmez.tempMemory.clear();
 
@@ -137,6 +151,8 @@ public class Controller {
                 ParseTree arbol = sintactico.program();
                 MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
                 visitas.visit(arbol);
+                System.out.println(MyVisitorOpmez.memory);
+                System.out.println(MyVisitorOpmez.tempMemory);
                 MyVisitorOpmez.memory.clear();
                 MyVisitorOpmez.tempMemory.clear();
             }else{

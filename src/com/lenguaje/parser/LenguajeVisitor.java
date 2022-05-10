@@ -24,40 +24,53 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArchivo(LenguajeParser.ArchivoContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LenguajeParser#body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBody(LenguajeParser.BodyContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code impresion}
-	 * labeled alternative in {@link LenguajeParser#body}.
+	 * labeled alternative in {@link LenguajeParser#print}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitImpresion(LenguajeParser.ImpresionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ifElse}
-	 * labeled alternative in {@link LenguajeParser#body}.
+	 * Visit a parse tree produced by the {@code asignacion}
+	 * labeled alternative in {@link LenguajeParser#assigment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfElse(LenguajeParser.IfElseContext ctx);
+	T visitAsignacion(LenguajeParser.AsignacionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code asigDeclar}
-	 * labeled alternative in {@link LenguajeParser#body}.
+	 * labeled alternative in {@link LenguajeParser#assigment_declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code declaracion}
-	 * labeled alternative in {@link LenguajeParser#body}.
+	 * labeled alternative in {@link LenguajeParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDeclaracion(LenguajeParser.DeclaracionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code asignacion}
-	 * labeled alternative in {@link LenguajeParser#body}.
+	 * Visit a parse tree produced by the {@code sentenciaFor}
+	 * labeled alternative in {@link LenguajeParser#for_sentence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAsignacion(LenguajeParser.AsignacionContext ctx);
+	T visitSentenciaFor(LenguajeParser.SentenciaForContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifElse}
+	 * labeled alternative in {@link LenguajeParser#if_else_elif}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfElse(LenguajeParser.IfElseContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code sentenciaElif}
 	 * labeled alternative in {@link LenguajeParser#elif_sentence}.

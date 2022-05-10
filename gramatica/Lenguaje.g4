@@ -4,17 +4,25 @@ program: file;
 file: VOID MAIN PO PC KO body* KC #archivo;
 
 body:
-    PRINTF  PO expr PC  SCOL #impresion
+    print
     |
-    if_sentence (elif_sentence | else_sentence)? #ifElse
+    if_else_elif
     |
-    INT ID ASSIGN expr SCOL #asigDeclar
+    assigment_declaration
     |
-    INT ID SCOL #declaracion
+    declaration
     |
-    ID ASSIGN expr SCOL #asignacion
+    assigment
+    |
+    for_sentence
     ;
 
+print: PRINTF  PO expr PC  SCOL #impresion;
+assigment: ID ASSIGN expr SCOL #asignacion;
+assigment_declaration: INT ID ASSIGN expr SCOL #asigDeclar;
+declaration: INT ID SCOL #declaracion;
+for_sentence: FOR PO assigment condition SCOL  assigment PC KO body* KC #sentenciaFor;
+if_else_elif: if_sentence (elif_sentence | else_sentence)? #ifElse;
 elif_sentence: ELSE if_sentence (elif_sentence | else_sentence)? #sentenciaElif;
 if_sentence: IF PO condition PC KO body* KC #sentenceIf;
 else_sentence: ELSE KO body* KC #sentenciaElse;
@@ -62,6 +70,7 @@ PRINTF:'printf';
 INT:'int';
 IF:'if';
 ELSE:'else';
+FOR:'for';
 MULT:'*';
 DIV:'/';
 SUM:'+';

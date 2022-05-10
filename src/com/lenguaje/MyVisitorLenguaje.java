@@ -9,6 +9,7 @@ import java.util.List;
 
 public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public static List<String> newSentence = new ArrayList<>();
+    public static List<String> compilador = new ArrayList<>();
     public int errors = 0;
     private PrintStream ps;
     public MyVisitorLenguaje(PrintStream ps){
@@ -19,15 +20,22 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
         newSentence.add("#initial()->");
+        compilador.add(".class public Codigo");
+        compilador.add(".super java/lang/Object");
+        compilador.add(".method public static main([Ljava/lang/String;)V");
         for (int i=0; i< ctx.body().size(); i++){
             String current = visit(ctx.body(i));
-            if(current != null)
+            if(current != null) {
                 newSentence.add(visit(ctx.body(i)));
+
+            }
             else{
                 errors++;
                 break;
             }
         }
+        compilador.add("return");
+        compilador.add(".end method");
         newSentence.add("<-");
         return null;
     }
@@ -35,11 +43,9 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitDeclaracion(LenguajeParser.DeclaracionContext ctx) {
         try{
-            if(ctx.SCOL() != null)
+
                 return "use "+ ctx.ID() +';';
-            else{
-                return null;
-            }
+
         }catch (Exception e){
             System.out.println(e);
             return null;
@@ -50,11 +56,9 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitAsignacion(LenguajeParser.AsignacionContext ctx) {
         try{
-            if(ctx.SCOL() != null)
+
                 return ctx.ID() + "="+ visit(ctx.expr())+';';
-            else{
-                return null;
-            }
+
         }catch (Exception e){
             System.out.println(e);
             return null;
@@ -64,11 +68,8 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
         try{
-            if(ctx.SCOL() != null)
-                return "use " +ctx.ID() + "="+visit(ctx.expr()) +';';
-            else{
-                return null;
-            }
+            return "use " +ctx.ID() + "="+visit(ctx.expr()) +';';
+
         }catch (Exception e){
             errors++;
             System.out.println(e);
@@ -244,6 +245,35 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             System.out.println(e);
             return null;
         }
+    }
+
+    @Override
+    public String visitSentenciaFor(LenguajeParser.SentenciaForContext ctx) {
+
+
+        boolean fail = false;
+        try{
+
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<ctx.body().size(); i++) {
+                String current = visit(ctx.body(i));
+                if (current == null){
+                    fail = true;
+                    break;
+                }
+                sb.append(current+"\n");
+            }
+            if(!fail)
+                return "for("+ctx.assigment(0).getText()+" "+ctx.condition().getText()+"; "+ctx.assigment(1).getText()+"){\n"+sb+"}";
+            else return null;
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
+
+
+
     }
 
     @Override
