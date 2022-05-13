@@ -108,7 +108,7 @@ public class Controller {
             ParseTree arbol = sintactico.program();
             MyVisitorLenguaje visitas = new MyVisitorLenguaje(ps);
             visitas.visit(arbol);
-            createFileJasmin(MyVisitorLenguaje.compilador);
+
             if (visitas.errors == 0) {
                 text_Input.clear();
                 for (String line : MyVisitorLenguaje.newSentence) {
@@ -143,6 +143,7 @@ public class Controller {
             CheckOpmez.tempMemory.clear();
 
             if(visitas_.errors == 0){
+
                 text_Output.clear();
                 CharStream input = CharStreams.fromFileName(file_in);
                 OpmezLexer lexico = new OpmezLexer(input);
@@ -151,10 +152,10 @@ public class Controller {
                 ParseTree arbol = sintactico.program();
                 MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
                 visitas.visit(arbol);
-                System.out.println(MyVisitorOpmez.memory);
-                System.out.println(MyVisitorOpmez.tempMemory);
+                createFileJasmin(MyVisitorOpmez.compilador);
                 MyVisitorOpmez.memory.clear();
                 MyVisitorOpmez.tempMemory.clear();
+                MyVisitorOpmez.compilador.clear();
             }else{
                 ps.println("No se pudo compilar");
             }

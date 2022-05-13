@@ -53,7 +53,7 @@ expr:
     |
     expr op=(SUM|SUB) expr #sumSub
     |
-    SUB? op=(INT| DOUBLE) #numero
+    SUB? INT #numero
     |
     SUB? ID #id
     |

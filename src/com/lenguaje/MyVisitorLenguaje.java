@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public static List<String> newSentence = new ArrayList<>();
-    public static List<String> compilador = new ArrayList<>();
+
     public int errors = 0;
     private PrintStream ps;
     public MyVisitorLenguaje(PrintStream ps){
@@ -20,9 +20,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
         newSentence.add("#initial()->");
-        compilador.add(".class public Codigo");
-        compilador.add(".super java/lang/Object");
-        compilador.add(".method public static main([Ljava/lang/String;)V");
+
         for (int i=0; i< ctx.body().size(); i++){
             String current = visit(ctx.body(i));
             if(current != null) {
@@ -34,8 +32,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
                 break;
             }
         }
-        compilador.add("return");
-        compilador.add(".end method");
+
         newSentence.add("<-");
         return null;
     }

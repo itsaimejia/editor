@@ -163,12 +163,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitNumero(OpmezParser.NumeroContext ctx) {
-        if(ctx.op.getType() == OpmezParser.INT) {
-            return Integer.valueOf(ctx.getText());
-        }else if(ctx.op.getType() == OpmezParser.DOUBLE) {
-            return Double.valueOf(ctx.getText());
-        }else
-            return null;
+        return Integer.valueOf(ctx.getText());
     }
 
 
@@ -269,49 +264,26 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitCondicionesIgualdadExpr(OpmezParser.CondicionesIgualdadExprContext ctx) {
-        if(visit(ctx.expr(0)).getClass().equals(Integer.class) && visit(ctx.expr(1)).getClass().equals(Integer.class)){
-            int left = (int) visit(ctx.expr(0));
-            int right = (int) visit(ctx.expr(1));
-            return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
-        }else if(visit(ctx.expr(0)).getClass().equals(Double.class) || visit(ctx.expr(1)).getClass().equals(Double.class)){
-            double left =  Double.parseDouble(visit(ctx.expr(0)).toString());
-            double right = Double.parseDouble(visit(ctx.expr(1)).toString());
-            return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
-        }else{
-            boolean left = (boolean) visit(ctx.expr(0));
-            boolean right = (boolean) visit(ctx.expr(1));
-            return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
-        }
+        int left = (int) visit(ctx.expr(0));
+        int right = (int) visit(ctx.expr(1));
+        return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
 
 
     }
 
     @Override
     public Object visitCondicionesMayMen(OpmezParser.CondicionesMayMenContext ctx) {
-        if(visit(ctx.expr(0)).getClass().equals(Integer.class) && visit(ctx.expr(1)).getClass().equals(Integer.class)){
-            int left = (int) visit(ctx.expr(0));
-            int right = (int) visit(ctx.expr(1));
-            return (ctx.op.getType() == OpmezParser.GT) ? (left > right) : (left < right);
-        }else{
-            double left =  Double.parseDouble(visit(ctx.expr(0)).toString());
-            double right = Double.parseDouble(visit(ctx.expr(1)).toString());
-            return (ctx.op.getType() == OpmezParser.GT) ? (left > right) : (left < right);
-        }
+        int left = (int) visit(ctx.expr(0));
+        int right = (int) visit(ctx.expr(1));
+        return (ctx.op.getType() == OpmezParser.GT) ? (left > right) : (left < right);
 
     }
 
     @Override
     public Object visitCondicionesMayMenIgual(OpmezParser.CondicionesMayMenIgualContext ctx) {
-        if(visit(ctx.expr(0)).getClass().equals(Integer.class) && visit(ctx.expr(1)).getClass().equals(Integer.class)){
-            int left = (int) visit(ctx.expr(0));
-            int right = (int) visit(ctx.expr(1));
-            return (ctx.op.getType() == OpmezParser.GEQT) ? (left >= right) : (left <= right);
-        }else{
-            double left =  Double.parseDouble(visit(ctx.expr(0)).toString());
-            double right = Double.parseDouble(visit(ctx.expr(1)).toString());
-            return (ctx.op.getType() == OpmezParser.GEQT) ? (left >= right) : (left <= right);
-        }
-
+        int left = (int) visit(ctx.expr(0));
+        int right = (int) visit(ctx.expr(1));
+        return (ctx.op.getType() == OpmezParser.GEQT) ? (left >= right) : (left <= right);
     }
 
     @Override
