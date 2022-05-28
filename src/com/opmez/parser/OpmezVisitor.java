@@ -18,12 +18,19 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCuerpo(OpmezParser.CuerpoContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code impresion}
+	 * Visit a parse tree produced by the {@code impresionExpr}
 	 * labeled alternative in {@link OpmezParser#instructions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitImpresion(OpmezParser.ImpresionContext ctx);
+	T visitImpresionExpr(OpmezParser.ImpresionExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code impresionString}
+	 * labeled alternative in {@link OpmezParser#instructions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImpresionString(OpmezParser.ImpresionStringContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ifElse}
 	 * labeled alternative in {@link OpmezParser#instructions}.
@@ -164,6 +171,13 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVerdadero(OpmezParser.VerdaderoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code cadenaTexto}
+	 * labeled alternative in {@link OpmezParser#string}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCadenaTexto(OpmezParser.CadenaTextoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parentesis}
 	 * labeled alternative in {@link OpmezParser#expr}.

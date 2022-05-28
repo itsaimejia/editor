@@ -6,7 +6,7 @@ use x;
 use y;
 use z;
 
-a=10;
+a=19;
 b=5;
 
 w=a*b;
@@ -18,6 +18,8 @@ systalk(w);
 systalk(x);
 systalk(y);
 systalk(z);
+
+systalk(100+100/5);
 
 
 

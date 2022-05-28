@@ -30,12 +30,19 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBody(LenguajeParser.BodyContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code impresion}
+	 * Visit a parse tree produced by the {@code impresionExpr}
 	 * labeled alternative in {@link LenguajeParser#print}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitImpresion(LenguajeParser.ImpresionContext ctx);
+	T visitImpresionExpr(LenguajeParser.ImpresionExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code impresionString}
+	 * labeled alternative in {@link LenguajeParser#print}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImpresionString(LenguajeParser.ImpresionStringContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code asignacion}
 	 * labeled alternative in {@link LenguajeParser#assigment}.
@@ -58,12 +65,12 @@ public interface LenguajeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclaracion(LenguajeParser.DeclaracionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code sentenciaFor}
-	 * labeled alternative in {@link LenguajeParser#for_sentence}.
+	 * Visit a parse tree produced by the {@code ciclo}
+	 * labeled alternative in {@link LenguajeParser#cicle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSentenciaFor(LenguajeParser.SentenciaForContext ctx);
+	T visitCiclo(LenguajeParser.CicloContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ifElse}
 	 * labeled alternative in {@link LenguajeParser#if_else_elif}.

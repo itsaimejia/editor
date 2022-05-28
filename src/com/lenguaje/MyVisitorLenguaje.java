@@ -76,7 +76,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     }
 
     @Override
-    public String visitImpresion(LenguajeParser.ImpresionContext ctx) {
+    public String visitImpresionExpr(LenguajeParser.ImpresionExprContext ctx) {
         try{
             return "systalk(" + visit(ctx.expr()) + ");";
         }catch (Exception e){
@@ -87,6 +87,17 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     }
 
+    @Override
+    public String visitImpresionString(LenguajeParser.ImpresionStringContext ctx) {
+        try{
+            return "systalk(" + ctx.STRING() + ");";
+        }catch (Exception e){
+            errors++;
+            System.out.println(e);
+            return null;
+        }
+
+    }
     @Override
     public String visitParentesis(LenguajeParser.ParentesisContext ctx) {
         try{
@@ -108,6 +119,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             return null;
         }
     }
+
 
     @Override
     public String visitId(LenguajeParser.IdContext ctx) {
@@ -245,7 +257,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     }
 
     @Override
-    public String visitSentenciaFor(LenguajeParser.SentenciaForContext ctx) {
+    public String visitCiclo(LenguajeParser.CicloContext ctx) {
 
 
         boolean fail = false;
@@ -261,7 +273,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
                 sb.append(current+"\n");
             }
             if(!fail)
-                return "for("+ctx.assigment(0).getText()+" "+ctx.condition().getText()+"; "+ctx.assigment(1).getText()+"){\n"+sb+"}";
+                return "while("+ctx.condition().getText()+"){\n"+sb+"}";
             else return null;
         }catch (Exception e){
             errors++;

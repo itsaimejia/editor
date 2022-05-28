@@ -67,7 +67,7 @@ public class Controller {
     }
 
     private void createFileJasmin(List<String> compilador) throws IOException{
-        String file_in ="C:\\Users\\itsai\\Desktop\\jasmin\\code.j";
+        String file_in ="C:\\jasmin\\code.j";
         FileWriter fw = new FileWriter(file_in,false);
         for (String line: compilador) {
             fw.write(line+"\n");

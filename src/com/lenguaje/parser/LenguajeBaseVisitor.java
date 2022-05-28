@@ -38,7 +38,14 @@ public class LenguajeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitImpresion(LenguajeParser.ImpresionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitImpresionExpr(LenguajeParser.ImpresionExprContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitImpresionString(LenguajeParser.ImpresionStringContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -66,7 +73,7 @@ public class LenguajeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSentenciaFor(LenguajeParser.SentenciaForContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCiclo(LenguajeParser.CicloContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

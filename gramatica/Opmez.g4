@@ -3,7 +3,9 @@ grammar Opmez;
 program: DEFINEFUNC INITIAL PO PC KO instructions* KC #cuerpo;
 
 instructions:
-    PRINT PO expr PC SCOL #impresion
+    PRINT PO expr  PC SCOL #impresionExpr
+    |
+    PRINT PO STRING PC SCOL #impresionString
     |
     if_sentence (elif_sentence | else_sentence)? #ifElse
     |
@@ -46,7 +48,8 @@ condition:
     ;
 
 
-
+string:
+    STRING #cadenaTexto;
 
 expr:
     expr op=(MULT|DIV) expr #multDiv
@@ -92,6 +95,7 @@ SUB:'-';
 INT:[0-9]+;
 DOUBLE: [0-9]+'.'[0-9]+?;
 ID:[a-zA-Z]+[a-zA-Z0-9]*;
+STRING: '"'.*?'"';
 LINECOM: '@' .*?  '\n' -> skip;
 MULTILINECOM: '@{' .*? '}@' -> skip;
 

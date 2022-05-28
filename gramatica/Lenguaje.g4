@@ -14,14 +14,14 @@ body:
     |
     assigment
     |
-    for_sentence
+    cicle
     ;
 
-print: PRINTF  PO expr PC  SCOL #impresion;
+print: PRINTF  PO expr PC  SCOL #impresionExpr |PRINTF  PO STRING PC  SCOL #impresionString;
 assigment: ID ASSIGN expr SCOL #asignacion;
 assigment_declaration: INT ID ASSIGN expr SCOL #asigDeclar;
 declaration: INT ID SCOL #declaracion;
-for_sentence: FOR PO assigment condition SCOL  assigment PC KO body* KC #sentenciaFor;
+cicle:'while' PO condition PC KO body* KC #ciclo;
 if_else_elif: if_sentence (elif_sentence | else_sentence)? #ifElse;
 elif_sentence: ELSE if_sentence (elif_sentence | else_sentence)? #sentenciaElif;
 if_sentence: IF PO condition PC KO body* KC #sentenceIf;
@@ -90,6 +90,7 @@ FALSE:'false';
 NOT:'!';
 NUM:[0-9]+;
 ID:[a-zA-Z]+[a-zA-Z0-9]*;
+STRING: '"'.*?'"';
 LINECOM: '//' .*?  '\n' -> skip;
 MULTILINECOM: '/*' .*? '*/' -> skip;
 WS:[ \t\r\n]+ -> skip;

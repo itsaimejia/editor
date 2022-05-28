@@ -109,11 +109,20 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
 
     @Override
-    public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
+    public Object visitImpresionExpr(OpmezParser.ImpresionExprContext ctx) {
         compilador.add("getstatic java/lang/System/out Ljava/io/PrintStream;");
         Object result = visit(ctx.expr());
         compilador.add("invokevirtual java/io/PrintStream/println(I)V");
         System.out.println(result);
+        return null;
+    }
+
+    @Override
+    public Object visitImpresionString(OpmezParser.ImpresionStringContext ctx) {
+        compilador.add("getstatic java/lang/System/out Ljava/io/PrintStream;");
+        compilador.add("ldc "+ctx.STRING());
+        compilador.add("invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V");
+        System.out.println(ctx.STRING().getText().replace('"', (char)' ').trim());
         return null;
     }
 
