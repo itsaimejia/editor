@@ -137,11 +137,10 @@ public class Controller {
             ParseTree arbol_ = sintactico_.program();
             CheckOpmez visitas_ = new CheckOpmez(ps);
             visitas_.visit(arbol_);
-            System.out.println(CheckOpmez.memory);
-            System.out.println(CheckOpmez.tempMemory);
+            createFileJasmin(CheckOpmez.compilador);
             CheckOpmez.memory.clear();
             CheckOpmez.tempMemory.clear();
-
+            CheckOpmez.compilador.clear();
             if(visitas_.errors == 0){
 
                 text_Output.clear();
@@ -152,10 +151,8 @@ public class Controller {
                 ParseTree arbol = sintactico.program();
                 MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
                 visitas.visit(arbol);
-                createFileJasmin(MyVisitorOpmez.compilador);
                 MyVisitorOpmez.memory.clear();
                 MyVisitorOpmez.tempMemory.clear();
-                MyVisitorOpmez.compilador.clear();
             }else{
                 ps.println("No se pudo compilar");
             }
