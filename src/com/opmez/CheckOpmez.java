@@ -10,8 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class CheckOpmez extends OpmezBaseVisitor<Object> {
-    public static HashMap<String, Object> memory = new LinkedHashMap<>();
-    public static HashMap<String, Object> tempMemory = new LinkedHashMap<>();
+    public static HashMap<String, Integer> memory = new LinkedHashMap<>();
+    public static HashMap<String, Integer> tempMemory = new LinkedHashMap<>();
     public static List<String> compilador = new ArrayList<>();
     private boolean joinIfElse = false;
     private boolean bodyInScope=false;
@@ -48,18 +48,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitCuerpoScope(OpmezParser.CuerpoScopeContext ctx) {
-        line++;
-        for (int i = 0; i < ctx.instructions().size(); i++) {
-            visit(ctx.instructions(i));
-            bodyInScope = true;
-            line++;
-
-        }
-        bodyInScope=false;
-        return null;
-    }
-    @Override
     public Object visitImpresionExpr(OpmezParser.ImpresionExprContext ctx) {
         compilador.add("getstatic java/lang/System/out Ljava/io/PrintStream;");
         visit(ctx.expr());
@@ -86,7 +74,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
 
-        if(joinIfElse || bodyInScope ){
+        if(joinIfElse  ){
             if(memory.containsKey(id) && tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
@@ -95,7 +83,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                 tempMemory.put(id,null);
             }
         }else if(!memory.containsKey(id)){
-            memory.put(id,null);
+            memory.put(id,0);
         }else{
             errorDeclaration =true;
             errors++;
@@ -107,8 +95,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitAsigDeclar(OpmezParser.AsigDeclarContext ctx) {
         String id = ctx.ID().getText();
-        Object value = visit(ctx.expr());
-        if(joinIfElse || bodyInScope){
+        int value = (int)visit(ctx.expr());
+        if(joinIfElse ){
             if(memory.containsKey(id) || tempMemory.containsKey(id)){
                 errorDeclaration =true;
                 errors++;
@@ -139,13 +127,20 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             return null;
         }else{
             try{
-                Object value = visit(ctx.expr());
-                if(joinIfElse || bodyInScope){
+                int value = (int)visit(ctx.expr());
+                if(joinIfElse ){
                     if(tempMemory.containsKey(id)){
                         tempMemory.put(id, value);
                         return tempMemory.get(id);
                     }else if(memory.containsKey(id)){
                         memory.put(id,value);
+                        int pos=0;
+                        for (String key: memory.keySet()) {
+                            if(key.equals(id)) break;
+                            pos++;
+                        }
+                        System.out.println("pos "+pos);
+                        compilador.add("istore "+pos);
                         return memory.get(id);
                     }else{
                         errors++;
@@ -177,7 +172,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitId(OpmezParser.IdContext ctx) {
         try{
             String id = ctx.ID().getText();
-            if(joinIfElse || bodyInScope){
+            if(joinIfElse){
                 if(tempMemory.containsKey(id)){
                     return tempMemory.get(id);
                 }else if(memory.containsKey(id)){
@@ -187,7 +182,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                         pos++;
                     }
                     compilador.add("iload "+pos);
-                    globalPos=String.valueOf(pos);
                     return memory.get(id);
                 }else{
                     errors++;
@@ -232,8 +226,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         int left = (int) visit(ctx.expr(0));
         int right = (int) visit(ctx.expr(1));
         compilador.add(ctx.op.getType() == OpmezParser.SUM?"iadd":"isub");
-        compilador.add("istore "+globalPos);
         return (ctx.op.getType() == OpmezParser.SUM) ? left + right : left - right;
+    }
+
+    @Override
+    public Object visitParentesis(OpmezParser.ParentesisContext ctx) {
+        return visit(ctx.expr());
     }
 
     @Override
