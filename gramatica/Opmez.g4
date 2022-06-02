@@ -3,9 +3,9 @@ grammar Opmez;
 program: DEFINEFUNC INITIAL PO PC KO instructions* KC #cuerpo;
 
 instructions:
-    PRINT PO expr  PC SCOL #impresionExpr
+    PRINT  PO expr PC  SCOL #impresionExpr
     |
-    PRINT PO STRING PC SCOL #impresionString
+    PRINT  PO string PC  SCOL #impresionString
     |
     if_sentence (elif_sentence | else_sentence)? #ifElse
     |
@@ -14,7 +14,10 @@ instructions:
     ID ASSIGN expr SCOL #asignacion
     |
     DECLARE ID ASSIGN expr SCOL #asigDeclar
+    |
+    'while' PO condition PC KO body KC #cicle
     ;
+
 
 elif_sentence: elif_frag_condition (elif_sentence | else_sentence)? #sentenciaElif;
 elif_frag_condition: ELIF PO condition PC KO body KC #condicionElif;
@@ -73,6 +76,7 @@ PC:')';
 IF:'if';
 ELSE:'else';
 ELIF:'elif';
+FOR:'for';
 SCOL:';';
 ASSIGN:'=';
 PRINT:'systalk';

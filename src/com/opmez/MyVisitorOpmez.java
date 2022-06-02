@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public static HashMap<String, Object> memory = new LinkedHashMap<>();
     public static HashMap<String, Object> tempMemory = new LinkedHashMap<>();
-    boolean joinIfElse = false;
+    boolean joinIfElseWhile = false;
     int fails = 0;
     private boolean bodyInScope=false;
 
@@ -44,7 +44,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitAsigDeclar(OpmezParser.AsigDeclarContext ctx) {
         String id = ctx.ID().getText();
         Object value = visit(ctx.expr());
-        if(joinIfElse || bodyInScope){
+        if(joinIfElseWhile || bodyInScope){
             if(!(memory.containsKey(id) || tempMemory.containsKey(id))){
                 tempMemory.put(id,value);
                 return tempMemory.get(id);
@@ -56,11 +56,27 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         return null;
     }
 
+    public Object visitImpresionExpr(OpmezParser.ImpresionExprContext ctx) {
+        Object result = visit(ctx.expr());
+        System.out.println(result);
+        return null;
+    }
+
+    @Override
+    public Object visitCadenaTexto(OpmezParser.CadenaTextoContext ctx) {
+        return ctx.STRING().getText().replace('"',' ').trim();
+    }
+
+    @Override
+    public Object visitImpresionString(OpmezParser.ImpresionStringContext ctx) {
+        System.out.println(visit(ctx.string()));
+        return null;
+    }
     @Override
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
 
-        if(joinIfElse || bodyInScope){
+        if(joinIfElseWhile || bodyInScope){
             if(!(memory.containsKey(id) && tempMemory.containsKey(id))){
                 tempMemory.put(id,null);
             }
@@ -75,7 +91,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         try{
             String id = ctx.ID().getText();
             Object value = visit(ctx.expr());
-            if(joinIfElse || bodyInScope){
+            if(joinIfElseWhile || bodyInScope){
                 if(!memory.containsKey(id)){
                     tempMemory.put(id, value);
                     return tempMemory.get(id);
@@ -95,12 +111,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     }
 
 
-    @Override
-    public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
-        Object result = visit(ctx.expr());
-        System.out.println(result);
-        return null;
-    }
+
 
     @Override
     public Object visitNumero(OpmezParser.NumeroContext ctx) {
@@ -112,7 +123,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     public Object visitId(OpmezParser.IdContext ctx) {
         try{
             String id = ctx.ID().getText();
-            if(joinIfElse || bodyInScope){
+            if(joinIfElseWhile || bodyInScope){
                 if(!memory.containsKey(id)){
                     return tempMemory.get(id);
                 }else{
@@ -150,7 +161,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
-        joinIfElse = true;
+        joinIfElseWhile = true;
         try{
             boolean result= (boolean) visit(ctx.if_sentence());
             if(!result){
@@ -166,16 +177,35 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         return null;
     }
 
+    public Object visitCicle(OpmezParser.CicleContext ctx) {
+        joinIfElseWhile = true;
+        try{
+
+            while(true){
+                if((boolean)visit(ctx.condition())==false){
+                    break;
+                }
+                visit(ctx.body());
+            }
+            tempMemory.clear();
+            joinIfElseWhile =false;
+            bodyInScope=false;
+            return null;
+        }catch(Exception e){
+            return null;
+        }
+    }
+
     @Override
     public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
-        joinIfElse = true;
+        joinIfElseWhile = true;
         try{
             boolean result = (boolean)visit(ctx.condition());
             if(result){
                 visit(ctx.body());
             }
             tempMemory.clear();
-            joinIfElse=false;
+            joinIfElseWhile =false;
             bodyInScope=false;
             return  result;
         }catch(Exception e){
@@ -187,17 +217,17 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitSentenciaElse(OpmezParser.SentenciaElseContext ctx) {
-        joinIfElse = true;
+        joinIfElseWhile = true;
         visit(ctx.body());
         tempMemory.clear();
-        joinIfElse=false;
+        joinIfElseWhile =false;
         bodyInScope=false;
         return null;
 
     }
     @Override
     public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
-        joinIfElse = true;
+        joinIfElseWhile = true;
         try{
             boolean result= (boolean) visit(ctx.elif_frag_condition());
             if(!result){
@@ -207,7 +237,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
                     visit(ctx.elif_sentence());
                 }
             }
-            joinIfElse=false;
+            joinIfElseWhile =false;
             bodyInScope=false;
         }catch (Exception e){
         }
@@ -217,12 +247,12 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitCondicionElif(OpmezParser.CondicionElifContext ctx) {
         try{
-            joinIfElse = true;
+            joinIfElseWhile = true;
             boolean result = (boolean)visit(ctx.condition());
             if(result){
                 visit(ctx.body());
             }
-            joinIfElse = false;
+            joinIfElseWhile = false;
             tempMemory.clear();
             return  result;
         }catch(Exception e){

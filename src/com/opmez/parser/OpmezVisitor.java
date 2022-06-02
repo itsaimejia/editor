@@ -60,6 +60,13 @@ public interface OpmezVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAsigDeclar(OpmezParser.AsigDeclarContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code cicle}
+	 * labeled alternative in {@link OpmezParser#instructions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCicle(OpmezParser.CicleContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code sentenciaElif}
 	 * labeled alternative in {@link OpmezParser#elif_sentence}.
 	 * @param ctx the parse tree

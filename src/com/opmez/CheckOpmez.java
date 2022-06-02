@@ -19,7 +19,9 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     private boolean globalSentence=false;
     public int errors = 0;
     private PrintStream ps;
-    int line = 1;
+    int line = 0;
+    String globalPos;
+    String label;
     public CheckOpmez(PrintStream ps){
         this.ps=ps;
         System.setOut(this.ps);
@@ -31,8 +33,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         compilador.add(".class public Codigo");
         compilador.add(".super java/lang/Object");
         compilador.add(".method public static main([Ljava/lang/String;)V");
-        compilador.add(".limit stack 10");
-        compilador.add(".limit locals 10");
+        compilador.add(".limit stack 20");
+        compilador.add(".limit locals 20");
         for (int i = 0; i < ctx.instructions().size(); i++) {
             visit(ctx.instructions(i));
             globalSentence=true;
@@ -58,12 +60,28 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         return null;
     }
     @Override
-    public Object visitImpresion(OpmezParser.ImpresionContext ctx) {
+    public Object visitImpresionExpr(OpmezParser.ImpresionExprContext ctx) {
         compilador.add("getstatic java/lang/System/out Ljava/io/PrintStream;");
-        Object result = visit(ctx.expr());
+        visit(ctx.expr());
         compilador.add("invokevirtual java/io/PrintStream/println(I)V");
         return null;
     }
+
+    @Override
+    public Object visitCadenaTexto(OpmezParser.CadenaTextoContext ctx) {
+        compilador.add("ldc \""+ctx.STRING().getText().replace('"',' ').trim()+"\n\"");
+        return ctx.STRING().getText();
+    }
+
+    @Override
+    public Object visitImpresionString(OpmezParser.ImpresionStringContext ctx) {
+        compilador.add("getstatic java/lang/System/out Ljava/io/PrintStream;");
+        visit(ctx.string());
+        compilador.add("invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V");
+        return null;
+    }
+
+
     @Override
     public Object visitDeclaracion(OpmezParser.DeclaracionContext ctx) {
         String id = ctx.ID().getText();
@@ -121,7 +139,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             return null;
         }else{
             try{
-                Object value = visit(ctx.expr());//bipush <valor>
+                Object value = visit(ctx.expr());
                 if(joinIfElse || bodyInScope){
                     if(tempMemory.containsKey(id)){
                         tempMemory.put(id, value);
@@ -157,8 +175,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitId(OpmezParser.IdContext ctx) {
-        System.out.println(memory);
-        System.out.println(tempMemory);
         try{
             String id = ctx.ID().getText();
             if(joinIfElse || bodyInScope){
@@ -171,6 +187,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                         pos++;
                     }
                     compilador.add("iload "+pos);
+                    globalPos=String.valueOf(pos);
                     return memory.get(id);
                 }else{
                     errors++;
@@ -185,6 +202,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     pos++;
                 }
                 compilador.add("iload "+pos);
+                globalPos=String.valueOf(pos);
                 return memory.get(id);
             }else{
                 errors++;
@@ -214,6 +232,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         int left = (int) visit(ctx.expr(0));
         int right = (int) visit(ctx.expr(1));
         compilador.add(ctx.op.getType() == OpmezParser.SUM?"iadd":"isub");
+        compilador.add("istore "+globalPos);
         return (ctx.op.getType() == OpmezParser.SUM) ? left + right : left - right;
     }
 
@@ -235,8 +254,36 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
+    public Object visitCicle(OpmezParser.CicleContext ctx) {
+        line++;
+        joinIfElse=true;
         Object result = null;
+        label="WHILEBODY";
+
+        try{
+
+            visit(ctx.condition());
+            compilador.add("goto DONE");
+            compilador.add("WHILEBODY:");
+            result=visit(ctx.body());
+            visit(ctx.condition());
+
+            compilador.add("DONE:");
+        }catch(Exception e){
+            errors++;
+            ps.println("Algo fallo en: while");
+        }
+        tempMemory.clear();
+        joinIfElse=false;
+        bodyInScope=false;
+        return result;
+    }
+
+    @Override
+    public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
+        line++;
+        Object result = null;
+        label = "IFBODY";
         try{
             visit(ctx.condition());
             compilador.add("goto ELSEBODY");
@@ -256,6 +303,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitSentenciaElse(OpmezParser.SentenciaElseContext ctx) {
+        line++;
         Object result = null;
         joinIfElse = true;
         try{
@@ -274,6 +322,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     }
     @Override
     public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
+        line++;
         joinIfElse = true;
         try{
             visit(ctx.elif_frag_condition());
@@ -296,13 +345,14 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             result=visit(ctx.body());
         }catch(Exception e){
             errors++;
-            ps.println("Algo fallo en: else");
+            ps.println("Algo fallo en: elif");
         }
         tempMemory.clear();
         joinIfElse=false;
         bodyInScope=false;
         return result;
     }
+
 
     @Override
     public Object visitCondicionNegacion(OpmezParser.CondicionNegacionContext ctx) {
@@ -321,10 +371,10 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         int left = (int) visit(ctx.expr(0));
         int right = (int) visit(ctx.expr(1));
         if(ctx.op.getType() == OpmezParser.EQT){
-            compilador.add("if_icmpeq IFBODY");
+            compilador.add("if_icmpeq "+label);
             return (left == right);
         }else {
-            compilador.add("if_icmpne IFBODY");
+            compilador.add("if_icmpne "+label);
             return (left != right);
         }
     }
@@ -333,12 +383,11 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public Object visitCondicionesMayMen(OpmezParser.CondicionesMayMenContext ctx) {
         int left = (int) visit(ctx.expr(0));
         int right = (int) visit(ctx.expr(1));
-
         if(ctx.op.getType() == OpmezParser.GT) {
-            compilador.add("if_icmpgt IFBODY");
+            compilador.add("if_icmpgt "+label);
             return  (left > right);
         }else{
-            compilador.add("if_icmplt IFBODY");
+            compilador.add("if_icmplt "+label);
             return (left < right);
         }
     }
@@ -349,10 +398,10 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         int right = (int) visit(ctx.expr(1));
 
         if(ctx.op.getType() == OpmezParser.GEQT){
-            compilador.add("if_icmpge IFBODY");
+            compilador.add("if_icmpge "+label);
             return (left >= right);
         }else{
-            compilador.add("if_icmple IFBODY");
+            compilador.add("if_icmple "+label);
             return (left <= right);
         }
     }

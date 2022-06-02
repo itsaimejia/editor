@@ -273,7 +273,8 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
                 sb.append(current+"\n");
             }
             if(!fail)
-                return "while("+ctx.condition().getText()+"){\n"+sb+"}";
+                return "while("+ctx.condition().getText()+")->\n"+sb+"<-";
+
             else return null;
         }catch (Exception e){
             errors++;

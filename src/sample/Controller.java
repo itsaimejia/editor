@@ -36,7 +36,6 @@ public class Controller {
 
 
     boolean creado =false;
-    boolean traducido =false;
     static FileChooser fileChooser = new FileChooser();
     static String path_actual;
     static Alert alert = new Alert(AlertType.WARNING);
@@ -67,12 +66,26 @@ public class Controller {
     }
 
     private void createFileJasmin(List<String> compilador) throws IOException{
-        String file_in ="C:\\jasmin\\code.j";
+        String file_in = new File ("code.j").getAbsolutePath();
         FileWriter fw = new FileWriter(file_in,false);
         for (String line: compilador) {
             fw.write(line+"\n");
         }
         fw.close();
+
+        ProcessBuilder builder = new ProcessBuilder(
+                "cmd.exe", "/c", "cd "+new File("").getAbsolutePath()+
+                "&& java -jar jasmin.jar code.j" +
+                "&& java Codigo");
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line;
+        while (true) {
+            line = r.readLine();
+            if (line == null) { break; }
+            System.out.println(line);
+        }
     }
     private void write() throws IOException{
         String file_in ="C:\\Javalib\\lib\\input.txt";
@@ -137,10 +150,10 @@ public class Controller {
             ParseTree arbol_ = sintactico_.program();
             CheckOpmez visitas_ = new CheckOpmez(ps);
             visitas_.visit(arbol_);
-            createFileJasmin(CheckOpmez.compilador);
+
             CheckOpmez.memory.clear();
             CheckOpmez.tempMemory.clear();
-            CheckOpmez.compilador.clear();
+
             if(visitas_.errors == 0){
 
                 text_Output.clear();
@@ -151,8 +164,11 @@ public class Controller {
                 ParseTree arbol = sintactico.program();
                 MyVisitorOpmez visitas = new MyVisitorOpmez(ps);
                 visitas.visit(arbol);
+                createFileJasmin(CheckOpmez.compilador);
                 MyVisitorOpmez.memory.clear();
                 MyVisitorOpmez.tempMemory.clear();
+                CheckOpmez.compilador.clear();
+
             }else{
                 ps.println("No se pudo compilar");
             }
