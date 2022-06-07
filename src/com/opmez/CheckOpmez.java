@@ -139,7 +139,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                             if(key.equals(id)) break;
                             pos++;
                         }
-                        System.out.println("pos "+pos);
+
                         compilador.add("istore "+pos);
                         return memory.get(id);
                     }else{
@@ -189,7 +189,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     return null;
                 }
             }else if(memory.containsKey(id)) {
-                System.out.println("iload");
+
                 int pos=0;
                 for (String key: memory.keySet()) {
                     if(key.equals(id)) break;
