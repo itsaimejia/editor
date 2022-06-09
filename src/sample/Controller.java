@@ -66,9 +66,6 @@ public class Controller {
     }
 
 
-
-
-
     private void createFileJasmin(List<String> compilador) throws IOException{
         text_Output.appendText("Create jasmin file\n");
         String file_in = new File ("code.j").getAbsolutePath();
@@ -93,16 +90,11 @@ public class Controller {
         }
     }
     private void write() throws IOException{
-        String file_in ="C:\\Javalib\\lib\\input.txt";
-        FileWriter fw = new FileWriter(file_in,false);
-        fw.write(text_Input.getText());
-        fw.close();
-
         PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         System.setErr(ps);
         System.setOut(ps);
         try {
-            CharStream input = CharStreams.fromFileName(file_in);
+            CharStream input = CharStreams.fromString(text_Input.getText());
             LenguajeLexer lexico = new LenguajeLexer(input);
             lexico.removeErrorListeners();
             lexico.addErrorListener(new BaseErrorListener(){
@@ -145,10 +137,10 @@ public class Controller {
     }
 
 
-    public void inputOpmez(String file_in) throws IOException {
+    public void inputOpmez() throws IOException {
         PrintStream ps = new PrintStream(new CustomOutputStream(text_Output));
         try {
-            CharStream input_ = CharStreams.fromFileName(file_in);
+            CharStream input_ = CharStreams.fromString(text_Input.getText());
             OpmezLexer lexico_ = new OpmezLexer(input_);
             CommonTokenStream tokens_ = new CommonTokenStream(lexico_);
             OpmezParser sintactico_ = new OpmezParser(tokens_);
@@ -161,7 +153,7 @@ public class Controller {
             if(visitas_.errors == 0){
 
                 text_Output.clear();
-                CharStream input = CharStreams.fromFileName(file_in);
+                CharStream input = CharStreams.fromString(text_Input.getText());
                 OpmezLexer lexico = new OpmezLexer(input);
                 CommonTokenStream tokens = new CommonTokenStream(lexico);
                 OpmezParser sintactico = new OpmezParser(tokens);
@@ -187,13 +179,10 @@ public class Controller {
     }
     private void resolve() throws IOException{
 
-        String file_in ="C:\\Javalib\\lib\\input.txt";
-        FileWriter fw = new FileWriter(file_in,false);
-        fw.write(text_Input.getText());
-        fw.close();
+
         saveFile();
         text_Output.clear();
-        inputOpmez(file_in);
+        inputOpmez();
 
     }
     @FXML
