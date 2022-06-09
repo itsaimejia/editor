@@ -20,19 +20,16 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitArchivo(LenguajeParser.ArchivoContext ctx) {
         newSentence.add("#initial()->");
-
         for (int i=0; i< ctx.body().size(); i++){
             String current = visit(ctx.body(i));
             if(current != null) {
                 newSentence.add(visit(ctx.body(i)));
-
             }
             else{
                 errors++;
                 break;
             }
         }
-
         newSentence.add("<-");
         return null;
     }
@@ -40,9 +37,7 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitDeclaracion(LenguajeParser.DeclaracionContext ctx) {
         try{
-
                 return "use "+ ctx.ID() +';';
-
         }catch (Exception e){
             System.out.println(e);
             return null;
@@ -53,26 +48,21 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     @Override
     public String visitAsignacion(LenguajeParser.AsignacionContext ctx) {
         try{
-
                 return ctx.ID() + "="+ visit(ctx.expr())+';';
-
         }catch (Exception e){
             System.out.println(e);
             return null;
         }
     }
-
     @Override
     public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
         try{
             return "use " +ctx.ID() + "="+visit(ctx.expr()) +';';
-
         }catch (Exception e){
             errors++;
             System.out.println(e);
             return null;
         }
-
     }
 
     @Override
@@ -84,7 +74,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             System.out.println(e);
             return null;
         }
-
     }
 
     @Override
@@ -96,8 +85,8 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             System.out.println(e);
             return null;
         }
-
     }
+
     @Override
     public String visitParentesis(LenguajeParser.ParentesisContext ctx) {
         try{
@@ -111,7 +100,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitNum(LenguajeParser.NumContext ctx) {
-
         try{
             return Integer.valueOf(ctx.getText()).toString();
         }catch (Exception e){
@@ -135,7 +123,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitMultDiv(LenguajeParser.MultDivContext ctx) {
-
         try{
             return ctx.getText();
         }catch (Exception e){
@@ -258,8 +245,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitCiclo(LenguajeParser.CicloContext ctx) {
-
-
         boolean fail = false;
         try{
 
@@ -281,9 +266,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             System.out.println(e);
             return null;
         }
-
-
-
     }
 
     @Override

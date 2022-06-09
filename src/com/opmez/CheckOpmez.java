@@ -41,7 +41,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             line++;
         }
         globalSentence=false;
-
         compilador.add("return");
         compilador.add(".end method");
         return null;
@@ -120,7 +119,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     @Override
     public Object visitAsignacion(OpmezParser.AsignacionContext ctx) {
         String id = ctx.ID().getText();
-
         if(errorDeclaration){
             errors++;
             System.out.println("Linea"+line+": "+ctx.ID().getText()+" no esta declarada");
@@ -139,7 +137,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                             if(key.equals(id)) break;
                             pos++;
                         }
-
                         compilador.add("istore "+pos);
                         return memory.get(id);
                     }else{
@@ -259,7 +256,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         label="WHILEBODY";
 
         try{
-
             visit(ctx.condition());
             compilador.add("goto DONE");
             compilador.add("WHILEBODY:");

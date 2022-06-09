@@ -65,37 +65,9 @@ public class Controller {
         }
     }
 
-    public void buildJAR() throws IOException {
-        text_Output.appendText("Build jar...\n");
-        ProcessBuilder builder = new ProcessBuilder(
-                "cmd.exe", "/c", "cd "+new File("").getAbsolutePath()+
-                "&& jar -cvf Program.jar Codigo.class" );
-        builder.redirectErrorStream(true);
-        Process p = builder.start();
-        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) { break; }
-            System.out.println(line);
-        }
-    }
 
-    public void executeJar() throws IOException {
-        text_Output.appendText("Excecute jar...\n");
-        ProcessBuilder builder = new ProcessBuilder(
-                "cmd.exe", "/c", "cd "+new File("").getAbsolutePath()+
-                "&& java -cp Program.jar Codigo" );
-        builder.redirectErrorStream(true);
-        Process p = builder.start();
-        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) { break; }
-            System.out.println(line);
-        }
-    }
+
+
 
     private void createFileJasmin(List<String> compilador) throws IOException{
         text_Output.appendText("Create jasmin file\n");

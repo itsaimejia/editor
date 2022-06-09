@@ -19,7 +19,6 @@
                                 <MenuItem fx:id="item_save" mnemonicParsing="false" onAction="#onSave" text="Save" />
                                 <MenuItem fx:id="item_saveAs" mnemonicParsing="false" onAction="#onSaveas" text="Save as" />
                                 <MenuItem fx:id="item_new" mnemonicParsing="false" onAction="#onNew" text="New" />
-                                <MenuItem fx:id="build_jar" mnemonicParsing="false" onAction="#buildJAR" text="Crear JAR" />
                                 <MenuItem fx:id="item_exit" mnemonicParsing="false" onAction="#onClose" text="Salir" />
                             </items>
                         </Menu>
@@ -52,6 +51,6 @@
         </AnchorPane>
       <Button fx:id="btn_Exec" layoutX="27.0" layoutY="342.0" onAction="#execute" prefHeight="25.0" prefWidth="93.0" text="Executar" />
       <Button fx:id="btn_Traducir" layoutX="494.0" layoutY="41.0" mnemonicParsing="false" onAction="#translate" prefHeight="25.0" prefWidth="74.0" text="Traducir" />
-      <Button fx:id="btn_ExecJAR" onAction="#executeJar" layoutX="463.0" layoutY="566.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Ejecutar .JAR" />
+
     </children>
 </AnchorPane>

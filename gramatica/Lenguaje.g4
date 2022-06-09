@@ -21,7 +21,7 @@ print: PRINTF  PO expr PC  SCOL #impresionExpr |PRINTF  PO STRING PC  SCOL #impr
 assigment: ID ASSIGN expr SCOL #asignacion;
 assigment_declaration: INT ID ASSIGN expr SCOL #asigDeclar;
 declaration: INT ID SCOL #declaracion;
-cicle:'while' PO condition PC KO body* KC #ciclo;
+cicle: WHILE PO condition PC KO body* KC #ciclo;
 if_else_elif: if_sentence (elif_sentence | else_sentence)? #ifElse;
 elif_sentence: ELSE if_sentence (elif_sentence | else_sentence)? #sentenciaElif;
 if_sentence: IF PO condition PC KO body* KC #sentenceIf;
@@ -71,6 +71,7 @@ INT:'int';
 IF:'if';
 ELSE:'else';
 FOR:'for';
+WHILE: 'while';
 MULT:'*';
 DIV:'/';
 SUM:'+';

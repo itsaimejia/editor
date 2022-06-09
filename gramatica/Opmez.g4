@@ -15,7 +15,7 @@ instructions:
     |
     DECLARE ID ASSIGN expr SCOL #asigDeclar
     |
-    'while' PO condition PC KO body KC #cicle
+    WHILE PO condition PC KO body KC #cicle
     ;
 
 
@@ -77,6 +77,7 @@ IF:'if';
 ELSE:'else';
 ELIF:'elif';
 FOR:'for';
+WHILE:'while';
 SCOL:';';
 ASSIGN:'=';
 PRINT:'systalk';

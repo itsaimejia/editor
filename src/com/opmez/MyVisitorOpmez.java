@@ -22,11 +22,9 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
     }
     @Override
     public Object visitCuerpo(OpmezParser.CuerpoContext ctx) {
-
         for (int i = 0; i < ctx.instructions().size(); i++) {
             visit(ctx.instructions(i));
         }
-
         return null;
     }
 
@@ -115,10 +113,8 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
 
     @Override
     public Object visitNumero(OpmezParser.NumeroContext ctx) {
-
         return Integer.valueOf(ctx.getText());
     }
-
     @Override
     public Object visitId(OpmezParser.IdContext ctx) {
         try{
@@ -130,8 +126,6 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
                     return memory.get(id);
                 }
             }else if(memory.containsKey(id)) {
-
-
                 return memory.get(id);
             }else{
                 return null;
@@ -141,6 +135,7 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
             return null;
         }
     }
+
     @Override
     public Object visitMultDiv(OpmezParser.MultDivContext ctx) {
         int left = (int) visit(ctx.expr(0));
@@ -153,34 +148,15 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         int right = (int) visit(ctx.expr(1));
         return (ctx.op.getType() == OpmezParser.SUM) ? left + right : left - right;
     }
-
     @Override
     public Object visitParentesis(OpmezParser.ParentesisContext ctx) {
         return visit(ctx.expr());
     }
 
-    @Override
-    public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
-        joinIfElseWhile = true;
-        try{
-            boolean result= (boolean) visit(ctx.if_sentence());
-            if(!result){
-                if(ctx.else_sentence()!=null){
-                    visit(ctx.else_sentence());
-                }else if(ctx.elif_sentence()!=null){
-                    visit(ctx.elif_sentence());
-                }
-            }
-
-        }catch (Exception e){
-        }
-        return null;
-    }
 
     public Object visitCicle(OpmezParser.CicleContext ctx) {
         joinIfElseWhile = true;
         try{
-
             while(true){
                 if((boolean)visit(ctx.condition())==false){
                     break;
@@ -196,6 +172,22 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         }
     }
 
+    @Override
+    public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
+        joinIfElseWhile = true;
+        try{
+            boolean result= (boolean) visit(ctx.if_sentence());
+            if(!result){
+                if(ctx.else_sentence()!=null){
+                    visit(ctx.else_sentence());
+                }else if(ctx.elif_sentence()!=null){
+                    visit(ctx.elif_sentence());
+                }
+            }
+        }catch (Exception e){
+        }
+        return null;
+    }
     @Override
     public Object visitSentenciaIf(OpmezParser.SentenciaIfContext ctx)  {
         joinIfElseWhile = true;
@@ -214,7 +206,6 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         }
 
     }
-
     @Override
     public Object visitSentenciaElse(OpmezParser.SentenciaElseContext ctx) {
         joinIfElseWhile = true;
@@ -223,7 +214,6 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         joinIfElseWhile =false;
         bodyInScope=false;
         return null;
-
     }
     @Override
     public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
@@ -263,19 +253,13 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         }
     }
 
-    @Override
-    public Object visitCondicionNegacion(OpmezParser.CondicionNegacionContext ctx) {
-        return !(boolean)visit(ctx.condition());
-    }
 
     @Override
     public Object visitCondicionesIgualdad(OpmezParser.CondicionesIgualdadContext ctx) {
         boolean left = (boolean) visit(ctx.condition(0));
         boolean right = (boolean) visit(ctx.condition(1));
-
         return (ctx.op.getType() == OpmezParser.EQT) ? (left == right) : (left != right);
     }
-
     @Override
     public Object visitCondicionesIgualdadExpr(OpmezParser.CondicionesIgualdadExprContext ctx) {
         int left = (int) visit(ctx.expr(0));
@@ -287,41 +271,37 @@ public class MyVisitorOpmez extends OpmezBaseVisitor<Object> {
         int left = (int) visit(ctx.expr(0));
         int right = (int) visit(ctx.expr(1));
         return (ctx.op.getType() == OpmezParser.GT) ? (left > right) : (left < right);
-
     }
-
-
     @Override
     public Object visitCondicionesMayMenIgual(OpmezParser.CondicionesMayMenIgualContext ctx) {
         int left = (int) visit(ctx.expr(0));
         int right = (int) visit(ctx.expr(1));
         return (ctx.op.getType() == OpmezParser.GEQT) ? (left >= right) : (left <= right);
     }
-
+    @Override
+    public Object visitCondicionNegacion(OpmezParser.CondicionNegacionContext ctx) {
+        return !(boolean)visit(ctx.condition());
+    }
     @Override
     public Object visitCondicionY(OpmezParser.CondicionYContext ctx) {
         boolean left = (boolean) visit(ctx.condition(0));
         boolean right = (boolean) visit(ctx.condition(1));
         return (left && right);
     }
-
     @Override
     public Object visitCondicionO(OpmezParser.CondicionOContext ctx) {
         boolean left = (boolean) visit(ctx.condition(0));
         boolean right = (boolean) visit(ctx.condition(1));
         return (left || right);
     }
-
     @Override
     public Object visitVerdadero(OpmezParser.VerdaderoContext ctx) {
         return true;
     }
-
     @Override
     public Object visitFalso(OpmezParser.FalsoContext ctx) {
         return false;
     }
-
     @Override
     public Object visitCondicionParentesis(OpmezParser.CondicionParentesisContext ctx) {
         return (boolean)visit(ctx.condition());
