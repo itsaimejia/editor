@@ -14,12 +14,12 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
     public static HashMap<String, Integer> tempMemory = new LinkedHashMap<>();
     public static List<String> compilador = new ArrayList<>();
     private boolean joinIfElse = false;
-    private boolean bodyInScope=false;
+
     private boolean errorDeclaration = false;
-    private boolean globalSentence=false;
     public int errors = 0;
     private PrintStream ps;
     int line = 0;
+    int numLabel = 0;
     String globalPos;
     String label;
     public CheckOpmez(PrintStream ps){
@@ -37,10 +37,8 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         compilador.add(".limit locals 20");
         for (int i = 0; i < ctx.instructions().size(); i++) {
             visit(ctx.instructions(i));
-            globalSentence=true;
             line++;
         }
-        globalSentence=false;
         compilador.add("return");
         compilador.add(".end method");
         return null;
@@ -186,7 +184,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
                     return null;
                 }
             }else if(memory.containsKey(id)) {
-
                 int pos=0;
                 for (String key: memory.keySet()) {
                     if(key.equals(id)) break;
@@ -231,6 +228,33 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         return visit(ctx.expr());
     }
 
+
+
+    @Override
+    public Object visitCicle(OpmezParser.CicleContext ctx) {
+        line++;
+        joinIfElse=true;
+        Object result = null;
+        label="WHILEBODY"+numLabel;
+
+        try{
+            visit(ctx.condition());
+            compilador.add("goto DONE");
+            compilador.add("WHILEBODY"+numLabel+":");
+            result=visit(ctx.body());
+            visit(ctx.condition());
+
+            compilador.add("DONE:");
+            numLabel++;
+        }catch(Exception e){
+            errors++;
+            ps.println("Algo fallo en: while");
+        }
+        tempMemory.clear();
+        joinIfElse=false;
+        return result;
+    }
+
     @Override
     public Object visitIfElse(OpmezParser.IfElseContext ctx)  {
         joinIfElse = true;
@@ -246,31 +270,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }
         compilador.add("END:");
         return null;
-    }
-
-    @Override
-    public Object visitCicle(OpmezParser.CicleContext ctx) {
-        line++;
-        joinIfElse=true;
-        Object result = null;
-        label="WHILEBODY";
-
-        try{
-            visit(ctx.condition());
-            compilador.add("goto DONE");
-            compilador.add("WHILEBODY:");
-            result=visit(ctx.body());
-            visit(ctx.condition());
-
-            compilador.add("DONE:");
-        }catch(Exception e){
-            errors++;
-            ps.println("Algo fallo en: while");
-        }
-        tempMemory.clear();
-        joinIfElse=false;
-        bodyInScope=false;
-        return result;
     }
 
     @Override
@@ -290,7 +289,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         }
         tempMemory.clear();
         joinIfElse=false;
-        bodyInScope=false;
         return result;
 
     }
@@ -309,10 +307,23 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             ps.println("Algo fallo en: else");
         }
         joinIfElse=false;
-        bodyInScope=false;
         tempMemory.clear();
         return result;
 
+    }
+    @Override
+    public Object visitCondicionElif(OpmezParser.CondicionElifContext ctx) {
+        Object result = null;
+        try{
+            boolean condicion = (boolean) visit(ctx.condition());
+            result=visit(ctx.body());
+        }catch(Exception e){
+            errors++;
+            ps.println("Algo fallo en: elif");
+        }
+        tempMemory.clear();
+        joinIfElse=false;
+        return result;
     }
     @Override
     public Object visitSentenciaElif(OpmezParser.SentenciaElifContext ctx) {
@@ -331,21 +342,7 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
         return null;
     }
 
-    @Override
-    public Object visitCondicionElif(OpmezParser.CondicionElifContext ctx) {
-        Object result = null;
-        try{
-            boolean condicion = (boolean) visit(ctx.condition());
-            result=visit(ctx.body());
-        }catch(Exception e){
-            errors++;
-            ps.println("Algo fallo en: elif");
-        }
-        tempMemory.clear();
-        joinIfElse=false;
-        bodyInScope=false;
-        return result;
-    }
+
 
 
     @Override
@@ -372,7 +369,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             return (left != right);
         }
     }
-
     @Override
     public Object visitCondicionesMayMen(OpmezParser.CondicionesMayMenContext ctx) {
         int left = (int) visit(ctx.expr(0));
@@ -385,7 +381,6 @@ public class CheckOpmez extends OpmezBaseVisitor<Object> {
             return (left < right);
         }
     }
-
     @Override
     public Object visitCondicionesMayMenIgual(OpmezParser.CondicionesMayMenIgualContext ctx) {
         int left = (int) visit(ctx.expr(0));

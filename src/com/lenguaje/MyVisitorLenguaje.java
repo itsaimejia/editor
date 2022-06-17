@@ -9,7 +9,6 @@ import java.util.List;
 
 public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public static List<String> newSentence = new ArrayList<>();
-
     public int errors = 0;
     private PrintStream ps;
     public MyVisitorLenguaje(PrintStream ps){
@@ -36,24 +35,13 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
 
     @Override
     public String visitDeclaracion(LenguajeParser.DeclaracionContext ctx) {
-        try{
-                return "use "+ ctx.ID() +';';
-        }catch (Exception e){
-            System.out.println(e);
-            return null;
-        }
-
+        return "use "+ ctx.ID() +';';
     }
-
     @Override
     public String visitAsignacion(LenguajeParser.AsignacionContext ctx) {
-        try{
-                return ctx.ID() + "="+ visit(ctx.expr())+';';
-        }catch (Exception e){
-            System.out.println(e);
-            return null;
-        }
+        return ctx.ID() + "="+ visit(ctx.expr())+';';
     }
+
     @Override
     public String visitAsigDeclar(LenguajeParser.AsigDeclarContext ctx) {
         try{
@@ -71,18 +59,15 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             return "systalk(" + visit(ctx.expr()) + ");";
         }catch (Exception e){
             errors++;
-            System.out.println(e);
             return null;
         }
     }
-
     @Override
     public String visitImpresionString(LenguajeParser.ImpresionStringContext ctx) {
         try{
             return "systalk(" + ctx.STRING() + ");";
         }catch (Exception e){
             errors++;
-            System.out.println(e);
             return null;
         }
     }
@@ -93,22 +78,17 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             return '(' + visit(ctx.expr()) +')';
         }catch (Exception e){
             errors++;
-            System.out.println(e);
             return null;
         }
     }
-
     @Override
     public String visitNum(LenguajeParser.NumContext ctx) {
         try{
             return Integer.valueOf(ctx.getText()).toString();
         }catch (Exception e){
-            System.out.println(e);
             return null;
         }
     }
-
-
     @Override
     public String visitId(LenguajeParser.IdContext ctx) {
         try{
@@ -118,7 +98,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             System.out.println(e);
             return null;
         }
-
     }
 
     @Override
@@ -131,10 +110,8 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
             return null;
         }
     }
-
     @Override
     public String visitSumSub(LenguajeParser.SumSubContext ctx) {
-
         try{
             return ctx.getText();
         }catch (Exception e){
@@ -159,7 +136,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
                 lineElif = visit(ctx.elif_sentence());
                 existNull= (lineElif == null)? true:false;
             }
-
             if(!existNull)
                 return lineIf + lineElse + lineElif;
             else return null;
@@ -247,7 +223,6 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public String visitCiclo(LenguajeParser.CicloContext ctx) {
         boolean fail = false;
         try{
-
             StringBuilder sb = new StringBuilder();
             for(int i=0; i<ctx.body().size(); i++) {
                 String current = visit(ctx.body(i));
@@ -272,43 +247,34 @@ public class MyVisitorLenguaje extends LenguajeBaseVisitor<String> {
     public String visitCondicionNegacion(LenguajeParser.CondicionNegacionContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitCondicionesIgualdad(LenguajeParser.CondicionesIgualdadContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitCondicionesRelacional(LenguajeParser.CondicionesRelacionalContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitCondicionY(LenguajeParser.CondicionYContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitCondicionO(LenguajeParser.CondicionOContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitVerdadero(LenguajeParser.VerdaderoContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitFalso(LenguajeParser.FalsoContext ctx) {
         return ctx.getText();
     }
-
-
     @Override
     public String visitCondicionParentesis(LenguajeParser.CondicionParentesisContext ctx) {
         return ctx.getText();
     }
-
     @Override
     public String visitExpresion(LenguajeParser.ExpresionContext ctx) {
         return visit(ctx.expr());

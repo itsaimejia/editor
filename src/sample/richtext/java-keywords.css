@@ -1,0 +1,50 @@
+.keyword {
+    -fx-fill: #d85168;
+    -fx-font-weight: bold;
+}
+.semicolon {
+    -fx-font-weight: bold;
+}
+.paren {
+    -fx-fill: #ff847d;
+    -fx-font-weight: bold;
+}
+.bracket {
+    -fx-fill: #6b2f5b;
+    -fx-font-weight: bold;
+}
+.brace {
+    -fx-fill: teal;
+    -fx-font-weight: bold;
+}
+.string {
+    -fx-fill: #99375d;
+}
+.comment {
+	-fx-fill: #b6ffff;
+}
+
+.menu .label
+{
+    -fx-text-fill: white;
+
+}
+
+.menu-item .label
+{
+    -fx-text-fill: black;
+
+}
+
+.text-area .content {
+ -fx-background-color: black ;
+
+}
+
+.text-area   {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+
+

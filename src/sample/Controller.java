@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.fxmisc.richtext.CodeArea;
 
 import java.io.*;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.Optional;
 public class Controller {
 
     @FXML
-    private TextArea text_Input;
+    private CodeArea text_Input;
     @FXML
     private TextArea text_Output;
 
@@ -274,7 +275,7 @@ public class Controller {
             }catch(Exception e){
             }
         } else if (result.get() == this_window) {
-            text_Input.setText("");
+            text_Input.clear();
             last_text= text_Input.getText();
             creado=false;
         }
